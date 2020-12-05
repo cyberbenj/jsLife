@@ -6,4 +6,4 @@ App.prototype.init = function(){
     console.log("ok");
 };
 
-module.exports = new App();
+export new App();
