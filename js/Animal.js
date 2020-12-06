@@ -3,8 +3,7 @@
 function Animal(position, isCarnivorous){
     this.position = position;
     this.isCarnivorous = isCarnivorous;
-    this.isFemale = (random(1) === 1);
-    this.life = ANIMAL_MAX_LIFE+random(ANIMAL_MAX_LIFE);
+    this.life = ANIMAL_LIFE+random(ANIMAL_LIFE);
     this.color = (isCarnivorous) ? ANIMAL_CARNIVOROUS_COLOR : ANIMAL_HERBIVOROUS_COLOR;
     this.target = position;
 }
@@ -19,6 +18,11 @@ Animal.prototype.update = function(){
     if(this.life > 0){
         this.move();
     }else{
+        let rnd = 1+random(1);
+        for(let i=0; i < rnd; i++){
+            App.animals.push(new Animal({x: this.position.x, y: this.position.y}, this.isCarnivorous));
+        }
+        
         this.die();
     }
 };
