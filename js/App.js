@@ -6,7 +6,7 @@ const ANIMAL_CARNIVOROUS_COLOR = [255, 0, 0];
 const ANIMAL_HERBIVOROUS_COLOR = [0, 0, 255];
 
 const VEGETABLE_MAX_LIFE = 200;
-const ANIMAL_MAX_LIFE = 2000;
+const ANIMAL_MAX_LIFE = 200;
 
 const App = (() => {
 
@@ -19,7 +19,7 @@ const App = (() => {
     
     App.prototype.init = function(){
         document.title = this.name;
-        this.canvas = new Canvas(document.body, "canvas", 100, 100, CANVAS_BACKGROUD_COLOR);
+        this.canvas = new Canvas(document.body, "canvas", 50, 50, CANVAS_BACKGROUD_COLOR);
 
         this.vegetables.push(new Vegetable(this.canvas.getRandomPosition()));
         this.loop();
