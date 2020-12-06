@@ -3,8 +3,8 @@
 function Animal(position, isCarnivorous){
     this.position = position;
     this.isCarnivorous = isCarnivorous;
-    this.isFemale = (Math.round(Math.random()) === 1);
-    this.life = ANIMAL_MAX_LIFE+Math.round(Math.random()*ANIMAL_MAX_LIFE);
+    this.isFemale = (random(1) === 1);
+    this.life = ANIMAL_MAX_LIFE+random(ANIMAL_MAX_LIFE);
     this.color = (isCarnivorous) ? ANIMAL_CARNIVOROUS_COLOR : ANIMAL_HERBIVOROUS_COLOR;
     this.target = position;
 }
@@ -57,9 +57,7 @@ Animal.prototype.move = function(){
 };
 
 Animal.prototype.die = function(){
-    // TODO : do it random
     //App.vegetables.push(new Vegetable({x: this.position.x, y: this.position.y}));
-
     let key = App.animals.indexOf(this);
     App.animals.splice(key, 1);
 };

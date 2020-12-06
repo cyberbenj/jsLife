@@ -8,6 +8,10 @@ const ANIMAL_HERBIVOROUS_COLOR = [0, 0, 255];
 const VEGETABLE_MAX_LIFE = 200;
 const ANIMAL_MAX_LIFE = 200;
 
+function random(max){
+    return Math.round(Math.random()*max);
+}
+
 const App = (() => {
 
     function App(){
