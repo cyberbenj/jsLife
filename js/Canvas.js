@@ -1,6 +1,6 @@
 "use strict";
 
-function Canvas(parent, id, width = 0, height = 0, backgroundColor = "#fff"){
+function Canvas(parent, id, width = 0, height = 0, backgroundColor){
     this.parent = parent;
     this.id = id;
     this.width = width;
@@ -14,7 +14,7 @@ Canvas.prototype.init = function(){
     canvas.id = this.id;
     canvas.width = this.width;
     canvas.height = this.height;
-    canvas.style.backgroundColor = this.backgroundColor;
+    canvas.style.backgroundColor = "rgb("+this.backgroundColor.join(", ")+")";
     this.parent.appendChild(canvas);
 };
 
@@ -32,7 +32,7 @@ Canvas.prototype.zoom = function(){
 
 Canvas.prototype.clear = function(){
     let ctx = this.get().getContext("2d");
-    ctx.fillStyle = this.backgroundColor;
+    ctx.fillStyle = "rgb("+this.backgroundColor.join(", ")+")";
     ctx.fillRect(0, 0, this.width, this.height);
 };
 

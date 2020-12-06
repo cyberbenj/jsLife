@@ -1,49 +1,51 @@
 "use strict";
 
+const CANVAS_BACKGROUD_COLOR = [255, 255, 255];
+const VEGETABLE_COLOR = [0, 255, 0];
+const ANIMAL_CARNIVOROUS_COLOR = [255, 0, 0];
+const ANIMAL_HERBIVOROUS_COLOR = [0, 0, 255];
+
+const VEGETABLE_MAX_LIFE = 200;
+const ANIMAL_MAX_LIFE = 2000;
+
 const App = (() => {
 
     function App(){
         this.name = "jsLife";
         this.canvas = null;
         this.vegetables = [];
+        this.animals = [];
     }
     
     App.prototype.init = function(){
         document.title = this.name;
-        this.canvas = new Canvas(document.body, "canvas", 100, 100);
+        this.canvas = new Canvas(document.body, "canvas", 100, 100, CANVAS_BACKGROUD_COLOR);
+
+        this.vegetables.push(new Vegetable(this.canvas.getRandomPosition()));
         this.loop();
     };
 
     App.prototype.update = function(){
-        let rnd = (Math.round(Math.random()*10) === 5);
-        if(rnd){
-            this.vegetables.push(new Vegetable(this.canvas.getRandomPosition()));
-        }
-
-        for(let key in this.vegetables){
-            let vegetable = this.vegetables[key];
-
-            vegetable.life -= 1;
-
-            if(vegetable.life === 0){
-                this.vegetables.splice(key, 1);
-            }
+        let entities = this.vegetables.concat(this.animals);
+        for(let entity of entities){
+            entity.update();
         }
     };
 
-    App.prototype.render = function(canvas){
-        canvas.zoom();
-        canvas.clear();
+    App.prototype.render = function(){
+        this.canvas.zoom();
+        this.canvas.clear();
 
-        for(let vegetable of this.vegetables){
-            vegetable.render(canvas);
+        let entities = this.vegetables.concat(this.animals);
+        for(let entity of entities){
+            entity.render();
         }
     };
 
     App.prototype.loop = function(){
         requestAnimationFrame(() => this.loop());
         this.update();
-        this.render(this.canvas);
+        this.render();
     };
 
     return new App();
