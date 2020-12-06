@@ -20,6 +20,10 @@ Vegetable.prototype.update = function(){
     }
 };
 
+Vegetable.prototype.spread = function(){
+	
+}
+
 Vegetable.prototype.die = function(){
     //App.animals.push(new Animal({x: this.position.x, y: this.position.y}, (random(1) === 1) ));
     let key = App.vegetables.indexOf(this);
