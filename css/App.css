@@ -1,0 +1,18 @@
+html,body{
+    margin: 0px;
+    padding: 0px;
+    width: 100vw;
+    height: 100vh;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color:#777;
+}
+
+canvas{
+    image-rendering:-moz-crisp-edges;
+    image-rendering:pixelated;
+}
