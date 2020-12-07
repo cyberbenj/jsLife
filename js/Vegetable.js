@@ -2,9 +2,9 @@
 
 function Vegetable(position){
     this.position = position;
-    this.life = VEGETABLE_LIFE+random(VEGETABLE_LIFE);
     this.color = VEGETABLE_COLOR;
-    this.hasSpread = false;
+    this.lifeSpan = VEGETABLE_LIFE_SPAN+random(VEGETABLE_LIFE_SPAN);
+    this.life = 0;
 }
 
 Vegetable.prototype.render = function(){
@@ -12,15 +12,12 @@ Vegetable.prototype.render = function(){
 };
 
 Vegetable.prototype.update = function(){
-    this.life -= 1;
+    this.life += 1;
 
-    if(this.life > 0){
-        if(!this.hasSpread){
+    if(this.life < this.lifeSpan){
+        if(this.life%VEGETABLE_SEEDING_CYCLE === 0){
             this.spread();
-            this.hasSpread = true;
         }
-        
-
     }else{
         this.die();
     }
@@ -52,6 +49,12 @@ Vegetable.prototype.spread = function(){
         App.vegetables.push(new Vegetable(App.canvas.getRandomPosition()));
     }*/
     
+    let seeds = random(VEGETABLE_MAX_SEED);
+    while(seeds > 0){
+        App.vegetables.push(new Vegetable(App.canvas.getRandomPosition()));
+        seeds -= 1;
+    }
+
     
 
 }
