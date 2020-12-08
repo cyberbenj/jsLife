@@ -6,6 +6,7 @@ function Canvas(parent, id, width = 0, height = 0, backgroundColor){
     this.width = width;
     this.height = height;
     this.backgroundColor = backgroundColor;
+    this.buffer = null;
     this.init();
 }
 
