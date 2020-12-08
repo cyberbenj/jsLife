@@ -6,7 +6,7 @@ function Animal(position, isCarnivorous){
     this.color = (isCarnivorous) ? ANIMAL_CARNIVOROUS_COLOR : ANIMAL_HERBIVOROUS_COLOR;
     this.lifeSpan = ANIMAL_LIFE_SPAN+random(ANIMAL_LIFE_SPAN);
     this.life = 0;
-    this.health = 100;
+    this.health = 200;
     this.target = position;
 }
 
@@ -16,15 +16,14 @@ Animal.prototype.render = function(){
 
 Animal.prototype.update = function(){
     this.life += 1;
+		//this.health -= 1;
 
-    if(this.life > 0){
-        this.move();
+    if(this.life < this.lifeSpan && this.health > 0){
+      if(this.life%ANIMAL_BREEDING_CYCLE === 0){
+				this.spread();
+      }
+			this.move();
     }else{
-        let rnd = 1+random(1);
-        for(let i=0; i < rnd; i++){
-            App.animals.push(new Animal({x: this.position.x, y: this.position.y}, this.isCarnivorous));
-        }
-        
         this.die();
     }
 };
@@ -43,7 +42,7 @@ Animal.prototype.move = function(){
     let speed = 0.2;
     this.position.x += Math.cos(radian)*speed;
     this.position.y += Math.sin(radian)*speed;
-
+		/*
     if(this.isCarnivorous){
         for(let animal of App.animals){
             if(this.position.x === animal.position.x && this.position.y === animal.position.y && !animal.isCarnivorous){
@@ -59,7 +58,15 @@ Animal.prototype.move = function(){
             }
         }
     }
-    
+    */
+};
+
+Animal.prototype.spread = function(){
+	let broods = random(ANIMAL_MAX_BROOD);
+	while(broods > 0){
+		App.animals.push(new Animal({x: this.position.x, y: this.position.y}, this.isCarnivorous));
+		broods -= 1;
+	}
 };
 
 Animal.prototype.die = function(){

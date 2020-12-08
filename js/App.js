@@ -1,7 +1,7 @@
 "use strict";
 
-const CANVAS_WIDTH = 100;
-const CANVAS_HEIGHT = 100;
+const CANVAS_WIDTH = 64;
+const CANVAS_HEIGHT = 64;
 
 const CANVAS_BACKGROUD_COLOR = [255, 255, 255];
 const VEGETABLE_COLOR = [0, 255, 0];
@@ -13,7 +13,7 @@ const VEGETABLE_SEEDING_CYCLE = 220;
 const VEGETABLE_MAX_SEED = 2;
 
 const ANIMAL_LIFE_SPAN = 200;
-const ANIMAL_BREEDING_CYCLE = 30;
+const ANIMAL_BREEDING_CYCLE = 220;
 const ANIMAL_MAX_BROOD = 2;
 
 /*
@@ -42,7 +42,9 @@ const App = (() => {
         document.title = this.name;
         this.canvas = new Canvas(document.body, "canvas", CANVAS_WIDTH, CANVAS_HEIGHT, CANVAS_BACKGROUD_COLOR);
         this.vegetables.push(new Vegetable(this.canvas.getRandomPosition()));
-        this.loop(); 
+        this.animals.push(new Animal(this.canvas.getRandomPosition(), true));
+				
+				this.loop(); 
     };
 
     App.prototype.update = function(){
