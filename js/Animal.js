@@ -7,7 +7,7 @@ function Animal(position, isCarnivorous){
     this.lifeSpan = ANIMAL_LIFE_SPAN+random(ANIMAL_LIFE_SPAN);
     this.life = 0;
     this.health = 200;
-    this.fieldOfView = 10;
+    this.fieldOfView = 50;
     this.target = position;
 }
 
@@ -23,6 +23,7 @@ Animal.prototype.update = function(){
         if(this.life%ANIMAL_BREEDING_CYCLE === 0){
 		    this.spread();
         }
+        
         //this.search();
         this.move();
     }else{
@@ -43,9 +44,10 @@ Animal.prototype.search = function(){
         //if(entity !== this && distance(this.entity) <= this.fieldOfView){
         if(entity !== this && distance(this.position, entity.position) <= this.fieldOfView){
             if(target === null || distance(this.position, entity.position) < distance(this.position, target.position)){
-                if(!this.isCarnivorous || entity.isCarnivorous !== this.isCarnivorous){
-                    target = {x: entity.position.x, y: entity.position.y};
-                }
+                    //target = {x: entity.position.x, y: entity.position.y};
+                    target = entity.position;
+                
+                
             }
         }
     }
@@ -58,8 +60,9 @@ Animal.prototype.search = function(){
 };
 
 Animal.prototype.move = function(){
-    var distance = Math.floor(Math.hypot(this.target.x-this.position.x, this.target.y-this.position.y));
-    if(distance <= 0){
+
+    //var distance = Math.floor(Math.hypot(this.target.x-this.position.x, this.target.y-this.position.y));
+    if(distance(this.position, this.target) <= 0){
         this.target = this.getTarget();
     }
 
@@ -106,7 +109,8 @@ Animal.prototype.move = function(){
 Animal.prototype.spread = function(){
 	let broods = random(ANIMAL_MAX_BROOD);
 	while(broods > 0){
-		App.animals.push(new Animal({x: this.position.x, y: this.position.y}, this.isCarnivorous));
+		//App.animals.push(new Animal({x: this.position.x, y: this.position.y}, this.isCarnivorous));
+		App.animals.push(new Animal({...this.position}, this.isCarnivorous));
 		broods -= 1;
 	}
 };

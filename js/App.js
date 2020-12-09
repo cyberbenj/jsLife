@@ -37,7 +37,7 @@ function radian(start, end){
     return Math.atan2(end.y-start.y, end.x-start.x);
 }
 
-const App = (() => {
+let App = (() => {
 
     function App(){
         this.name = "jsLife";
@@ -52,10 +52,11 @@ const App = (() => {
         this.vegetables.push(new Vegetable(this.canvas.getRandomPosition()));
         //this.animals.push(new Animal(this.canvas.getRandomPosition(), true));
 
-        let max = 50;
+        let max = 500;
         while(max > 0){
             //this.animals.push(new Animal(this.canvas.getRandomPosition(), true));
-            this.animals.push(new Animal(this.canvas.getRandomPosition(), (random(1) === 1)));
+            //this.animals.push(new Animal(this.canvas.getRandomPosition(), (random(1) === 1)));
+            this.animals.push(new Animal(this.canvas.getRandomPosition(), (random(0) === 1)));
             max -= 1;
         }
 
