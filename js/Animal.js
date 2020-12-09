@@ -6,9 +6,10 @@ function Animal(position, isCarnivorous){
     this.color = (isCarnivorous) ? ANIMAL_CARNIVOROUS_COLOR : ANIMAL_HERBIVOROUS_COLOR;
     this.lifeSpan = ANIMAL_LIFE_SPAN+random(ANIMAL_LIFE_SPAN);
     this.life = 0;
-    this.health = 200;
-    this.fieldOfView = 50;
+    this.health = ANIMAL_MAX_HEALTH;
+    this.fieldOfView = ANIMAL_FIELD_OF_VIEW;
     this.target = position;
+    this.targetEntity = null;
 }
 
 Animal.prototype.render = function(){
@@ -17,100 +18,71 @@ Animal.prototype.render = function(){
 
 Animal.prototype.update = function(){
     this.life += 1;
-		//this.health -= 1;
+	this.health -= 1;
 
     if(this.life < this.lifeSpan && this.health > 0){
         if(this.life%ANIMAL_BREEDING_CYCLE === 0){
 		    this.spread();
         }
         
-        //this.search();
+        if(this.health < ANIMAL_MAX_HEALTH/2){
+            this.search();
+        }
+        
         this.move();
     }else{
         this.die();
     }
 };
 
-Animal.prototype.getTarget = function(){
-    return App.canvas.getRandomPosition();
-};
-
 Animal.prototype.search = function(){
     let entities = (this.isCarnivorous) ? App.animals : App.vegetables;
-    
     let target = null;
+    let targetEntity = null;
+
     for(let entity of entities){
-        //if(entity !== this && (this.isCarnivorous && !entity.isCarnivorous)){
-        //if(entity !== this && distance(this.entity) <= this.fieldOfView){
-        if(entity !== this && distance(this.position, entity.position) <= this.fieldOfView){
-            if(target === null || distance(this.position, entity.position) < distance(this.position, target.position)){
-                    //target = {x: entity.position.x, y: entity.position.y};
+        if(!this.isCarnivorous || (this.isCarnivorous && !entity.isCarnivorous)){
+            if(distance(this.position, entity.position) <= this.fieldOfView){
+                if(target === null || distance(this.position, entity.position) < distance(this.position, target)){
                     target = entity.position;
-                
-                
+                    targetEntity = entity;
+                }
             }
         }
     }
 
-    target = null;
-
     if(target !== null){
         this.target = target;
+        this.targetEntity = targetEntity;
     }
 };
 
 Animal.prototype.move = function(){
+    if(this.target === null || distance(this.position, this.target) <= 0){
+        if(this.targetEntity instanceof Vegetable){
+            App.vegetables.splice(App.vegetables.indexOf(this.targetEntity), 1);
+            this.health = ANIMAL_MAX_HEALTH*1.5;
+        }
 
-    //var distance = Math.floor(Math.hypot(this.target.x-this.position.x, this.target.y-this.position.y));
-    if(distance(this.position, this.target) <= 0){
-        this.target = this.getTarget();
+        if(this.targetEntity instanceof Animal){
+            App.animals.splice(App.animals.indexOf(this.targetEntity), 1);
+            this.health = ANIMAL_MAX_HEALTH*3;
+        }
+        
+        this.target = App.canvas.getRandomPosition();
+        this.targetEntity = null;
     }
 
-    /*if(distance(this.position, this.target) <= 0){
-        this.target = this.getTarget();
-    }*/
-
-    //var r = radian(this.position, this.target);
-
-    /*let position = {x: this.position.x, y: this.position.y};
-    let target = {x: this.target.x, y: this.target.y};
-
-    if(distance(position.x, position.y, target.x, target.y) <= 0){
-        //this.target = App.canvas.getRandomPosition();
-        this.target = this.getTarget();
-    }*/
-
-    let radian = Math.atan2(this.target.y-this.position.y, this.target.x-this.position.x);
+    let r = radian(this.position, this.target);
     let speed = 0.2;
-    this.position.x += Math.cos(radian)*speed;
-    this.position.y += Math.sin(radian)*speed;
-
-    
-    
-    /*
-    if(this.isCarnivorous){
-        for(let animal of App.animals){
-            if(this.position.x === animal.position.x && this.position.y === animal.position.y && !animal.isCarnivorous){
-                let key = App.animals.indexOf(animal);
-                App.animals.splice(key, 1);
-            }
-        }
-    }else{
-        for(let vegetable of App.vegetables){
-            if(this.position.x === vegetable.position.x && this.position.y === vegetable.position.y){
-                let key = App.vegetables.indexOf(vegetable);
-                App.vegetables.splice(key, 1);
-            }
-        }
-    }
-    */
+    this.position[0] += Math.cos(r)*speed;
+    this.position[1] += Math.sin(r)*speed;
 };
 
 Animal.prototype.spread = function(){
 	let broods = random(ANIMAL_MAX_BROOD);
 	while(broods > 0){
-		//App.animals.push(new Animal({x: this.position.x, y: this.position.y}, this.isCarnivorous));
-		App.animals.push(new Animal({...this.position}, this.isCarnivorous));
+        App.animals.push(new Animal([...this.position], this.isCarnivorous));
 		broods -= 1;
 	}
 };

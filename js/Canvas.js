@@ -45,19 +45,19 @@ Canvas.prototype.drawPixel = function(position, color){
     data[1] = color[1];
     data[2] = color[2];
     data[3] = 255;
-    ctx.putImageData(pixel, position.x, position.y);
+    ctx.putImageData(pixel, position[0], position[1]);
 };
 
 Canvas.prototype.getPixel = function(position){
     let ctx = this.get().getContext("2d");
-    let data = ctx.getImageData(position.x, position.y, 1, 1).data;
+    let data = ctx.getImageData(position[0], position[1], 1, 1).data;
     return [data[0], data[1], data[2]];
 };
 
 Canvas.prototype.getRandomPosition = function(){
-    return {x: random(this.width), y: random(this.height)};
+    return [random(this.width), random(this.height)];
 };
 
 Canvas.prototype.isOut = function(position){
-    return (position.y < 0 || position.y >= this.height || position.x < 0 || position.x >= this.width);
+    return (position[1] < 0 || position[1] >= this.height || position[0] < 0 || position[0] >= this.width);
 };

@@ -1,40 +1,36 @@
 "use strict";
 
-const CANVAS_WIDTH = 128;
-const CANVAS_HEIGHT = 128;
+const CANVAS_WIDTH = 64;
+const CANVAS_HEIGHT = 64;
 
 const CANVAS_BACKGROUD_COLOR = [255, 255, 255];
 const VEGETABLE_COLOR = [0, 255, 0];
 const ANIMAL_CARNIVOROUS_COLOR = [255, 0, 0];
 const ANIMAL_HERBIVOROUS_COLOR = [0, 0, 255];
 
-const VEGETABLE_LIFE_SPAN = 200;
-const VEGETABLE_SEEDING_CYCLE = 180;
+const NB_VEGETABLES = 200;
+const VEGETABLE_LIFE_SPAN = 1000;
+const VEGETABLE_SEEDING_CYCLE = 500;
 const VEGETABLE_MAX_SEED = 2;
 
-const ANIMAL_LIFE_SPAN = 200;
-const ANIMAL_BREEDING_CYCLE = 220;
+const NB_HERBIVOROUS = 20;
+const NB_CARNIVOROUS = 10;
+const ANIMAL_LIFE_SPAN = 1000;
+const ANIMAL_BREEDING_CYCLE = 500;
 const ANIMAL_MAX_BROOD = 2;
-
-/*
-    generate random number of vegetables
-
-    - animal get target only if in fov
-    - if target leaves fov, animal target is null
-    - if target is reached, target die
-
-*/
+const ANIMAL_MAX_HEALTH = 400;
+const ANIMAL_FIELD_OF_VIEW = 8;
 
 function random(max){
     return Math.round(Math.random()*max);
 }
 
 function distance(start, end){
-    return Math.floor(Math.hypot(end.x-start.x, end.y-start.y));
+    return Math.floor(Math.hypot(end[0]-start[0], end[1]-start[1]));
 }
 
 function radian(start, end){
-    return Math.atan2(end.y-start.y, end.x-start.x);
+    return Math.atan2(end[1]-start[1], end[0]-start[0]);
 }
 
 let App = (() => {
@@ -49,15 +45,23 @@ let App = (() => {
     App.prototype.init = function(){
         document.title = this.name;
         this.canvas = new Canvas(document.body, "canvas", CANVAS_WIDTH, CANVAS_HEIGHT, CANVAS_BACKGROUD_COLOR);
-        this.vegetables.push(new Vegetable(this.canvas.getRandomPosition()));
-        //this.animals.push(new Animal(this.canvas.getRandomPosition(), true));
 
-        let max = 500;
-        while(max > 0){
-            //this.animals.push(new Animal(this.canvas.getRandomPosition(), true));
-            //this.animals.push(new Animal(this.canvas.getRandomPosition(), (random(1) === 1)));
-            this.animals.push(new Animal(this.canvas.getRandomPosition(), (random(0) === 1)));
-            max -= 1;
+        let nbVegetables = NB_VEGETABLES;
+        while(nbVegetables > 0){
+            this.vegetables.push(new Vegetable(this.canvas.getRandomPosition()));
+            nbVegetables -= 1;
+        }
+        
+        let nbCarnivorous = NB_CARNIVOROUS;
+        while(nbCarnivorous > 0){
+            this.animals.push(new Animal(this.canvas.getRandomPosition(), true));
+            nbCarnivorous -= 1;
+        }
+
+        let nbHerbivorous = NB_HERBIVOROUS;
+        while(nbHerbivorous > 0){
+            this.animals.push(new Animal(this.canvas.getRandomPosition(), false));
+            nbHerbivorous -= 1;
         }
 
 		this.loop(); 
