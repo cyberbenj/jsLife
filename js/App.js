@@ -1,28 +1,55 @@
 "use strict";
 
+// TODO : different rng_seed for vegetables, carnivorous, hebrivorous
+// replace all constants named ANIMAL_xxx 
+
+const REAL_RANDOM = false;
 const CANVAS_WIDTH = 64;
 const CANVAS_HEIGHT = 64;
 
 const CANVAS_BACKGROUD_COLOR = [255, 255, 255];
 const VEGETABLE_COLOR = [0, 255, 0];
-const ANIMAL_CARNIVOROUS_COLOR = [255, 0, 0];
-const ANIMAL_HERBIVOROUS_COLOR = [0, 0, 255];
+const CARNIVOROUS_COLOR = [255, 0, 0];
+const HERBIVOROUS_COLOR = [0, 0, 255];
 
-const NB_VEGETABLES = 200;
+const VEGETABLES_SPAWN = 20;
+const HERBIVOROUS_SPAWN = 5;
+const CARNIVOROUS_SPAWN = 2;
+
 const VEGETABLE_LIFE_SPAN = 1000;
 const VEGETABLE_SEEDING_CYCLE = 500;
 const VEGETABLE_MAX_SEED = 2;
 
-const NB_HERBIVOROUS = 20;
-const NB_CARNIVOROUS = 10;
 const ANIMAL_LIFE_SPAN = 1000;
 const ANIMAL_BREEDING_CYCLE = 500;
 const ANIMAL_MAX_BROOD = 2;
 const ANIMAL_MAX_HEALTH = 400;
 const ANIMAL_FIELD_OF_VIEW = 8;
 
+const CARNIVOROUS_LIFE_SPAN = 1000;
+const CARNIVOROUS_MAX_HEALTH = 400;
+const CARNIVOROUS_FOOD_HEALTH = 400;
+const CARNIVOROUS_BREEDING_CYCLE = 500;
+const CARNIVOROUS_MAX_BROOD = 2;
+const CARNIVOROUS_FIELD_OF_VIEW = 8;
+
+const HERBIVOROUS_LIFE_SPAN = 1000;
+const HERBIVOROUS_MAX_HEALTH = 400;
+const HERBIVOROUS_FOOD_HEALTH = 400;
+const HERBIVOROUS_BREEDING_CYCLE = 500;
+const HERBIVOROUS_MAX_BROOD = 2;
+const HERBIVOROUS_FIELD_OF_VIEW = 8;
+
+let rng_seed = 1;
+
+function rng(){
+    let x = Math.sin(rng_seed++)*10000;
+    return x - Math.floor(x);
+}
+
 function random(max){
-    return Math.round(Math.random()*max);
+    let x = (REAL_RANDOM) ? Math.random()*max : rng()*max;
+    return Math.round(x);
 }
 
 function distance(start, end){
@@ -34,7 +61,6 @@ function radian(start, end){
 }
 
 let App = (() => {
-
     function App(){
         this.name = "jsLife";
         this.canvas = null;
@@ -46,22 +72,22 @@ let App = (() => {
         document.title = this.name;
         this.canvas = new Canvas(document.body, "canvas", CANVAS_WIDTH, CANVAS_HEIGHT, CANVAS_BACKGROUD_COLOR);
 
-        let nbVegetables = NB_VEGETABLES;
-        while(nbVegetables > 0){
+        let vegetablesSpawn = VEGETABLES_SPAWN;
+        while(vegetablesSpawn > 0){
             this.vegetables.push(new Vegetable(this.canvas.getRandomPosition()));
-            nbVegetables -= 1;
+            vegetablesSpawn -= 1;
         }
         
-        let nbCarnivorous = NB_CARNIVOROUS;
-        while(nbCarnivorous > 0){
+        let carnivorousSpawn = CARNIVOROUS_SPAWN;
+        while(carnivorousSpawn > 0){
             this.animals.push(new Animal(this.canvas.getRandomPosition(), true));
-            nbCarnivorous -= 1;
+            carnivorousSpawn -= 1;
         }
 
-        let nbHerbivorous = NB_HERBIVOROUS;
-        while(nbHerbivorous > 0){
+        let herbivorousSpawn = HERBIVOROUS_SPAWN;
+        while(herbivorousSpawn > 0){
             this.animals.push(new Animal(this.canvas.getRandomPosition(), false));
-            nbHerbivorous -= 1;
+            herbivorousSpawn -= 1;
         }
 
 		this.loop(); 

@@ -3,7 +3,7 @@
 function Animal(position, isCarnivorous){
     this.position = position;
     this.isCarnivorous = isCarnivorous;
-    this.color = (isCarnivorous) ? ANIMAL_CARNIVOROUS_COLOR : ANIMAL_HERBIVOROUS_COLOR;
+    this.color = (isCarnivorous) ? CARNIVOROUS_COLOR : HERBIVOROUS_COLOR;
     this.lifeSpan = ANIMAL_LIFE_SPAN+random(ANIMAL_LIFE_SPAN);
     this.life = 0;
     this.health = ANIMAL_MAX_HEALTH;
