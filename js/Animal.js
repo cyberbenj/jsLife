@@ -1,6 +1,5 @@
 "use strict";
 
-//function Animal(position, isCarnivorous){
 function Animal(position, isCarnivorous, settings){
     this.position = position;
     this.isCarnivorous = isCarnivorous;
@@ -12,7 +11,7 @@ function Animal(position, isCarnivorous, settings){
     this.hunger = settings.hunger;
     this.breeding = settings.breeding;
     this.broods =  settings.broods;
-    this.fieldOfView = settings.fieldOfView;
+    this.fieldOfView = settings.FOV;
     this.target = position;
     this.targetEntity = null;
 }

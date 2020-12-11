@@ -18,7 +18,7 @@ Vegetable.prototype.update = function(){
     this.life += 1;
 
     if(this.life < this.death){
-        if(this.life%this.seeding === 0){
+        if(this.life%this.seeding === 0 && App.animals.length > 0){
             this.spread();
         }
     }else{

@@ -1,25 +1,5 @@
 "use strict";
 
-// TODO : different rng_seed for vegetables, carnivorous, herbivorous ?
-let rng_seed = 1;
-function rng(){
-    let x = Math.sin(rng_seed++)*10000;
-    return x - Math.floor(x);
-}
-
-function random(max){
-    let x = (App.settings.random) ? Math.random()*max : rng()*max;
-    return Math.round(x);
-}
-
-function distance(start, end){
-    return Math.floor(Math.hypot(end[0]-start[0], end[1]-start[1]));
-}
-
-function radian(start, end){
-    return Math.atan2(end[1]-start[1], end[0]-start[0]);
-}
-
 let App = (() => {
     function App(){
         this.name = "jsLife";
@@ -45,7 +25,7 @@ let App = (() => {
                 hunger: 250,
                 breeding: 700,
                 broods: 2,
-                fieldOfView: 16
+                FOV: 16
             },
             carnivorous: {
                 color: [255, 0, 0],
@@ -55,23 +35,57 @@ let App = (() => {
                 hunger: 250,
                 breeding: 700,
                 broods: 2,
-                fieldOfView: 16
+                FOV: 16
             }
         };
+        this.rngSeed = 1;
         this.canvas = null;
         this.vegetables = [];
         this.animals = [];
     }
+
+    App.prototype.showSettings = function(){
+        let form = document.createElement("form");
+        addInput(form, "startButton", "button", "start !", (test) => {
+            //console.log("ok!");
+            console.log(test);
+        });
+
+        let settings = Object.keys(this.settings);
+
+        for(let setting of settings){
+            let value = this.settings[setting];
+            let type = typeof value;
+            let inputType = (type === "boolean") ? "checkbox" : "tel";
+
+            //console.log(setting+" ("+value+") = "+value);
+            //addInput(form, setting, inputType, value);
+            if(type === "object"){
+                if(setting !== "canvas"){
+                    let subSettings = Object.keys(this.settings[setting]);
+
+                    for(let subSetting of subSettings){
+                        if(subSetting !== "color"){
+                            let subValue = this.settings[setting][subSetting];
+                            addInput(form, setting+" "+subSetting, "tel", subValue);
+                        }
+                    }
+
+                }
+            }else addInput(form, setting, inputType, value);
+
+        }
+
+        document.body.append(form);
+    };
     
     App.prototype.init = function(){
         document.title = this.name;
-        this.canvas = new Canvas(
-            document.body,
-            "canvas",
-            this.settings.canvas.width,
-            this.settings.canvas.height,
-            this.settings.canvas.backgroundColor
-        );
+        
+        this.showSettings();
+
+        /*let canvasSettings = this.settings.canvas;
+        this.canvas = new Canvas(document.body, "canvas", canvasSettings.width, canvasSettings.height, canvasSettings.backgroundColor);
         
         let vegetablesSpawn = this.settings.vegetable.spawn;
         while(vegetablesSpawn > 0){
@@ -90,16 +104,8 @@ let App = (() => {
             this.animals.push(new Animal(this.canvas.getRandomPosition(), true, this.settings.carnivorous));
             carnivorousSpawn -= 1;
         }
-
-        /*
-        let entities = [this.settings.vegetable, this.settings.herbivorous, this.settings.carnivorous];
-        for(let entity of entities){
-            let spawn = entity.spawn;
-            console.log(entity);
-        }
-        */
-
-		this.loop(); 
+        
+        this.loop();*/
     };
 
     App.prototype.update = function(){

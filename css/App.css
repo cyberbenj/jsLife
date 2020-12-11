@@ -13,6 +13,51 @@ body{
 }
 
 canvas{
-    image-rendering:-moz-crisp-edges;
-    image-rendering:pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: pixelated;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 40px);
+    max-width: 300px;
+}
+/*
+form .field{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-top: 10px;
+}
+*/
+form .field{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding-top: 10px;
+}
+
+form .field:last-child{
+    padding-bottom: 10px;
+}
+
+form .field label{
+    width: 100%;
+    color: #ddd;
+}
+
+form .field input[type="tel"]{
+    width: 100%;
+}
+
+form .field.for-checkbox{
+    flex-direction: row-reverse;
+    justify-content: center;
+}
+
+form .field.for-checkbox *{
+    width: auto;
 }
