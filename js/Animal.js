@@ -1,21 +1,18 @@
 "use strict";
 
-function Animal(position, isCarnivorous){
+//function Animal(position, isCarnivorous){
+function Animal(position, isCarnivorous, settings){
     this.position = position;
     this.isCarnivorous = isCarnivorous;
-    this.color = (isCarnivorous) ? CARNIVOROUS_COLOR : HERBIVOROUS_COLOR;
-    
-    this.death = (isCarnivorous) ? CARNIVOROUS_DEATH : HERBIVOROUS_DEATH;
-    if(RANDOM) this.death += random(this.death);
+    this.color = settings.color;
+    this.death = settings.death;
+    if(App.settings.random) this.death += random(this.death);
     this.life = 0;
-    
-    this.health = (isCarnivorous) ? CARNIVOROUS_HEALTH : HERBIVOROUS_HEALTH;
-    this.hunger = (isCarnivorous) ? CARNIVOROUS_HUNGER : HERBIVOROUS_HUNGER;
-
-    this.breeding = (isCarnivorous) ? CARNIVOROUS_BREEDING : HERBIVOROUS_BREEDING;
-    this.broods = (isCarnivorous) ? CARNIVOROUS_BROODS : HERBIVOROUS_BROODS;
-
-    this.fieldOfView = (isCarnivorous) ? CARNIVOROUS_FIELD_OF_VIEW : HERBIVOROUS_FIELD_OF_VIEW;
+    this.health = settings.health;
+    this.hunger = settings.hunger;
+    this.breeding = settings.breeding;
+    this.broods =  settings.broods;
+    this.fieldOfView = settings.fieldOfView;
     this.target = position;
     this.targetEntity = null;
 }
@@ -69,12 +66,12 @@ Animal.prototype.move = function(){
     if(this.target === null || distance(this.position, this.target) <= 0){
         if(this.targetEntity instanceof Vegetable){
             App.vegetables.splice(App.vegetables.indexOf(this.targetEntity), 1);
-            this.health = HERBIVOROUS_HEALTH;
+            this.health = App.settings.herbivorous.health;
         }
 
         if(this.targetEntity instanceof Animal){
             App.animals.splice(App.animals.indexOf(this.targetEntity), 1);
-            this.health = CARNIVOROUS_HEALTH;
+            this.health = App.settings.carnivorous.health;
         }
         
         this.target = App.canvas.getRandomPosition();
@@ -88,9 +85,10 @@ Animal.prototype.move = function(){
 };
 
 Animal.prototype.breed = function(){
-	let broods = (RANDOM) ? random(this.broods) : this.broods;
+    let broods = (App.settings.random) ? random(this.broods) : this.broods;
+    let settings = (this.isCarnivorous) ? App.settings.carnivorous : App.settings.herbivorous;
 	while(broods > 0){
-        App.animals.push(new Animal([...this.position], this.isCarnivorous));
+        App.animals.push(new Animal([...this.position], this.isCarnivorous, settings));
 		broods -= 1;
 	}
 };
