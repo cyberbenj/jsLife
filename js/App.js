@@ -46,45 +46,54 @@ let App = (() => {
 
     App.prototype.showSettings = function(){
         let form = document.createElement("form");
-        addInput(form, "startButton", "button", "start !", (test) => {
-            //console.log("ok!");
-            console.log(test);
+        form.id = "form";
+
+        addInput(form, "start", "button", "start !", {
+            "click" : () => {
+                this.start();
+            }
+        });
+
+        addInput(form, "random", "checkbox", this.settings.random, {
+            "change": (input) => {
+                this.settings.random = input.checked;
+            }
         });
 
         let settings = Object.keys(this.settings);
-
+        
         for(let setting of settings){
-            let value = this.settings[setting];
-            let type = typeof value;
-            let inputType = (type === "boolean") ? "checkbox" : "tel";
+            let type = typeof this.settings[setting];
 
-            //console.log(setting+" ("+value+") = "+value);
-            //addInput(form, setting, inputType, value);
-            if(type === "object"){
-                if(setting !== "canvas"){
-                    let subSettings = Object.keys(this.settings[setting]);
-
-                    for(let subSetting of subSettings){
-                        if(subSetting !== "color"){
-                            let subValue = this.settings[setting][subSetting];
-                            addInput(form, setting+" "+subSetting, "tel", subValue);
-                        }
+            if(type === "object" && setting !== "canvas"){
+                let subSettings = Object.keys(this.settings[setting]);
+                
+                for(let subSetting of subSettings){
+                    if(subSetting !== "color"){
+                        let subValue = this.settings[setting][subSetting];
+                        
+                        addInput(form, setting+" "+subSetting, "tel", subValue, {
+                            "change": (input) => {
+                                input.value = input.value.replace(/[^\d]/g, "");
+                                this.settings[setting][subSetting] = parseInt(input.value);
+                            }
+                        });
                     }
-
                 }
-            }else addInput(form, setting, inputType, value);
-
+            }
         }
-
         document.body.append(form);
     };
     
     App.prototype.init = function(){
         document.title = this.name;
-        
         this.showSettings();
+    };
 
-        /*let canvasSettings = this.settings.canvas;
+    App.prototype.start = function(){
+        document.getElementById("form").style.display = "none";
+        
+        let canvasSettings = this.settings.canvas;
         this.canvas = new Canvas(document.body, "canvas", canvasSettings.width, canvasSettings.height, canvasSettings.backgroundColor);
         
         let vegetablesSpawn = this.settings.vegetable.spawn;
@@ -105,7 +114,7 @@ let App = (() => {
             carnivorousSpawn -= 1;
         }
         
-        this.loop();*/
+        this.loop();
     };
 
     App.prototype.update = function(){

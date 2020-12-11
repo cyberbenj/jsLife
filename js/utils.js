@@ -18,7 +18,7 @@ function radian(start, end){
     return Math.atan2(end[1]-start[1], end[0]-start[0]);
 }
 
-function addInput(parent, name, type, value, onclick = null){
+function addInput(parent, name, type, value, events = null){
     let checkbox = (type === "checkbox");
 
     let field = document.createElement("div");
@@ -39,16 +39,18 @@ function addInput(parent, name, type, value, onclick = null){
         input.checked = value;
     }else input.value = value;
 
-    if(type === "tel"){
+    /*if(type === "tel"){
         input.onchange = () => {
             input.value = input.value.replace(/[^\d]/g, "");
         };
-    }
+    }*/
 
-    if(onclick !== null){
-        input.onclick = () => {
-            onclick(input.id);
-        };
+    if(events !== null){
+        for(let event of Object.keys(events)){
+            input.addEventListener(event, () => {
+                events[event](input);
+            });
+        }
     }
 
     field.append(input);
