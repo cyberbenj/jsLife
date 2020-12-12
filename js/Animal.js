@@ -84,7 +84,7 @@ Animal.prototype.move = function(){
 };
 
 Animal.prototype.breed = function(){
-    let broods = (App.settings.random) ? random(this.broods) : this.broods;
+    let broods = (App.settings.random) ? App.random(this.broods) : this.broods;
     let settings = (this.isCarnivorous) ? App.settings.carnivorous : App.settings.herbivorous;
 	while(broods > 0){
         App.animals.push(new Animal([...this.position], this.isCarnivorous, settings));

@@ -1,13 +1,10 @@
 "use strict";
 
-function rng(){
-    let x = Math.sin(App.rngSeed++)*10000;
-    return x - Math.floor(x);
-}
+let rng_seed = 1;
 
-function random(max){
-    let x = (App.settings.random) ? Math.random()*max : rng()*max;
-    return Math.round(x);
+function rng(){
+    let x = Math.sin(rng_seed++)*10000;
+    return x - Math.floor(x);
 }
 
 function distance(start, end){
@@ -54,4 +51,28 @@ function addInput(parent, name, type, value, events = null){
     }
 
     field.append(input);
+}
+
+function dom(type, attributes = null, events = null){
+    let element = document.createElement(type);
+    
+    if(attributes !== null){
+        for(let attribute of Object.keys(attributes)){
+            switch(attribute){
+                case "innerHTML": element.innerHTML = attributes[attribute]; break;
+                case "textContent": element.textContent = attributes[attribute]; break;
+                default: element.setAttribute(attribute, attributes[attribute]); break;
+            }
+        }
+    }
+
+    if(events !== null){
+        for(let event of Object.keys(events)){
+            element.addEventListener(event, () => {
+                events[event](element);
+            });
+        }
+    }
+
+    return element;
 }

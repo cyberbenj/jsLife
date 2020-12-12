@@ -38,14 +38,13 @@ let App = (() => {
                 FOV: 16
             }
         };
-        this.rngSeed = 1;
         this.canvas = null;
         this.vegetables = [];
         this.animals = [];
     }
 
     App.prototype.showSettings = function(){
-        let form = document.createElement("form");
+        /*let form = document.createElement("form");
         form.id = "form";
 
         addInput(form, "start", "button", "start !", {
@@ -66,23 +65,85 @@ let App = (() => {
             let type = typeof this.settings[setting];
 
             if(type === "object" && setting !== "canvas"){
+                let fieldset = document.createElement("fieldset");
+                let legend = document.createElement("legend");
+                fieldset.innerHTML = setting;
+                
                 let subSettings = Object.keys(this.settings[setting]);
                 
                 for(let subSetting of subSettings){
                     if(subSetting !== "color"){
+                        
+
                         let subValue = this.settings[setting][subSetting];
                         
-                        addInput(form, setting+" "+subSetting, "tel", subValue, {
+                        //addInput(form, setting+" "+subSetting, "tel", subValue, {
+                        addInput(fieldset, subSetting, "tel", subValue, {
                             "change": (input) => {
                                 input.value = input.value.replace(/[^\d]/g, "");
                                 this.settings[setting][subSetting] = parseInt(input.value);
                             }
                         });
+
+                        
+
                     }
                 }
+
+                form.append(fieldset);
             }
         }
+        document.body.append(form);*/
+
+        /*let form = dom(document.body, "form");
+        
+        let fieldset = dom(form, "fieldset");
+        let legend = dom(fieldset, "legend", {
+            "innerHTML": "Test"
+        });
+
+        let input = dom(fieldset, "input", {
+            "type": "text",
+            "value": "test"
+        },
+        {
+            "change": (element) => {
+                console.log(element.value);
+            }
+        });*/
+
+        let form = dom("form", {"id": "form"});
         document.body.append(form);
+
+        let startButton = dom("input", {"type": "button", "value": "start !"}, {
+            "click": () => {
+                this.start();
+            }
+        });
+        form.append(startButton);
+        
+        let randomField = dom("div", {"class": "field"});
+        form.append(randomField);
+
+        let randomInput = dom("input", {"type": "tel", "id": "input_random"});
+        let randomLabel = dom("label", {"textContent": "test", "for": randomInput.id});
+        randomField.append(randomLabel);
+        randomField.append(randomInput);
+        
+        
+
+        /*let startButton = dom("input", {"type": "checkbox", "checked": true}, {
+            "change": (element) => {
+                this.settings.random = element.checked;
+            }
+        });
+        form.append(startButton);*/
+
+
+
+
+
+
     };
     
     App.prototype.init = function(){
@@ -138,6 +199,11 @@ let App = (() => {
         requestAnimationFrame(() => this.loop());
         this.update();
         this.render();
+    };
+
+    App.prototype.random = function(max){
+        let x = (this.settings.random) ? Math.random()*max : rng()*max;
+        return Math.round(x);
     };
 
     return new App();

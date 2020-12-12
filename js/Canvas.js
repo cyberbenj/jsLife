@@ -55,7 +55,7 @@ Canvas.prototype.getPixel = function(position){
 };
 
 Canvas.prototype.getRandomPosition = function(){
-    return [random(this.width), random(this.height)];
+    return [App.random(this.width), App.random(this.height)];
 };
 
 Canvas.prototype.isOut = function(position){

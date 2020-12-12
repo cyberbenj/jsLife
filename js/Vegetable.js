@@ -4,7 +4,7 @@ function Vegetable(position, settings){
     this.position = position;
     this.color = settings.color;
     this.death = settings.death;
-    if(App.settings.random) this.death += random(this.death);
+    if(App.settings.random) this.death += App.random(this.death);
     this.life = 0;
     this.seeding = settings.seeding;
     this.seeds = settings.seeds;
@@ -28,7 +28,7 @@ Vegetable.prototype.update = function(){
 
 Vegetable.prototype.spread = function(){
     if(App.vegetables.length < (App.canvas.width*App.canvas.height)/3){
-        let seeds = (App.settings.random) ? random(this.seeds) : this.seeds;
+        let seeds = (App.settings.random) ? App.random(this.seeds) : this.seeds;
         while(seeds > 0){
             App.vegetables.push(new Vegetable(App.canvas.getRandomPosition(), App.settings.vegetable));
             seeds -= 1;
