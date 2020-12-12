@@ -5,7 +5,7 @@ function Animal(position, isCarnivorous, settings){
     this.isCarnivorous = isCarnivorous;
     this.color = settings.color;
     this.death = settings.death;
-    if(App.settings.main.random) this.death += random(this.death);
+    if(App.settings.main.random) this.death += App.random(this.death);
     this.life = 0;
     this.health = settings.health;
     this.hunger = settings.hunger;

@@ -54,27 +54,53 @@ let App = (() => {
                 }
             })
         );
-
+        
+        let tabs = dom("div", {"id": "tabs"});
+        form.append(tabs);
+        
+        let tabId = 0;
         let settings = Object.keys(this.settings);
         for(let setting of settings){
             let type = typeof this.settings[setting];
-
-            if(type !== "object") form.append(this.settingField(setting));
+            
             if(type === "object" && setting !== "canvas"){
-                let fieldset = dom("fieldset");
-                fieldset.append(dom("legend", {"textContent": setting}));
+                let tabClass = (tabId === 0) ? "tab active" : "tab";
+                let tab = dom("div", {"class": tabClass, "textContent": setting, "tab-id": tabId}, {
+                    "click": (element) => {
+                        this.setTab(element.getAttribute("tab-id"));
+                    }
+                });
+                tabs.append(tab);
                 
+                let tabContentClass = (tabId === 0) ? "tab-content active" : "tab-content";
+                let tabContent = dom("div", {"class": tabContentClass, "tab-id": tabId});
+
                 let subSettings = Object.keys(this.settings[setting]);
                 for(let subSetting of subSettings){
                     if(subSetting !== "color"){
-                        fieldset.append(this.settingField(setting, subSetting));
+                        tabContent.append(this.settingField(setting, subSetting));
                     }
                 }
-                form.append(fieldset);
+                form.append(tabContent);
+                tabId += 1;
             }
         }
-        
+
         document.body.append(form);
+    };
+
+    App.prototype.setTab = function(id){
+        let tabs = document.getElementsByClassName("tab");
+        for(let tab of tabs){
+            let tabClass = (tab.getAttribute("tab-id") === id) ? "tab active" : "tab";
+            tab.setAttribute("class", tabClass);
+        }
+
+        let contents = document.getElementsByClassName("tab-content");
+        for(let content of contents){
+            let contentClass = (content.getAttribute("tab-id") === id) ? "tab-content active" : "tab-content";
+            content.setAttribute("class", contentClass);
+        }
     };
 
     App.prototype.settingField = function(setting, subSetting){
@@ -107,6 +133,9 @@ let App = (() => {
         let canvasSettings = this.settings.canvas;
         this.canvas = new Canvas(document.body, "canvas", canvasSettings.width, canvasSettings.height, canvasSettings.backgroundColor);
         
+        this.vegetables = [];
+        this.animals = [];
+
         let vegetablesSpawn = this.settings.vegetable.spawn;
         while(vegetablesSpawn > 0){
             this.vegetables.push(new Vegetable(this.canvas.getRandomPosition(), this.settings.vegetable));
