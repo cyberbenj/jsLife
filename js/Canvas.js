@@ -11,12 +11,8 @@ function Canvas(parent, id, width = 0, height = 0, backgroundColor){
 }
 
 Canvas.prototype.init = function(){
-    let canvas = document.createElement("canvas");
-    canvas.id = this.id;
-    canvas.width = this.width;
-    canvas.height = this.height;
-    canvas.style.backgroundColor = "rgb("+this.backgroundColor.join(", ")+")";
-    this.parent.appendChild(canvas);
+    let canvas = dom("canvas", {"id": "canvas", "width": this.width, "height": this.height});
+    this.parent.append(canvas);
 };
 
 Canvas.prototype.get = function(){

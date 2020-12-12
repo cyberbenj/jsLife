@@ -5,7 +5,7 @@ function Animal(position, isCarnivorous, settings){
     this.isCarnivorous = isCarnivorous;
     this.color = settings.color;
     this.death = settings.death;
-    if(App.settings.random) this.death += random(this.death);
+    if(App.settings.main.random) this.death += random(this.death);
     this.life = 0;
     this.health = settings.health;
     this.hunger = settings.hunger;
@@ -84,7 +84,7 @@ Animal.prototype.move = function(){
 };
 
 Animal.prototype.breed = function(){
-    let broods = (App.settings.random) ? App.random(this.broods) : this.broods;
+    let broods = (App.settings.main.random) ? App.random(this.broods) : this.broods;
     let settings = (this.isCarnivorous) ? App.settings.carnivorous : App.settings.herbivorous;
 	while(broods > 0){
         App.animals.push(new Animal([...this.position], this.isCarnivorous, settings));

@@ -4,7 +4,9 @@ let App = (() => {
     function App(){
         this.name = "jsLife";
         this.settings = {
-            random: false,
+            main: {
+                random: false
+            },
             canvas: {
                 width: 64,
                 height: 64,
@@ -44,106 +46,54 @@ let App = (() => {
     }
 
     App.prototype.showSettings = function(){
-        /*let form = document.createElement("form");
-        form.id = "form";
-
-        addInput(form, "start", "button", "start !", {
-            "click" : () => {
-                this.start();
-            }
-        });
-
-        addInput(form, "random", "checkbox", this.settings.random, {
-            "change": (input) => {
-                this.settings.random = input.checked;
-            }
-        });
+        let form = dom("form", {"id": "form"});
+        form.append(
+            dom("input", {"type": "button", "value": "start !"}, {
+                "click": () => {
+                    this.start();
+                }
+            })
+        );
 
         let settings = Object.keys(this.settings);
-        
         for(let setting of settings){
             let type = typeof this.settings[setting];
 
+            if(type !== "object") form.append(this.settingField(setting));
             if(type === "object" && setting !== "canvas"){
-                let fieldset = document.createElement("fieldset");
-                let legend = document.createElement("legend");
-                fieldset.innerHTML = setting;
+                let fieldset = dom("fieldset");
+                fieldset.append(dom("legend", {"textContent": setting}));
                 
                 let subSettings = Object.keys(this.settings[setting]);
-                
                 for(let subSetting of subSettings){
                     if(subSetting !== "color"){
-                        
-
-                        let subValue = this.settings[setting][subSetting];
-                        
-                        //addInput(form, setting+" "+subSetting, "tel", subValue, {
-                        addInput(fieldset, subSetting, "tel", subValue, {
-                            "change": (input) => {
-                                input.value = input.value.replace(/[^\d]/g, "");
-                                this.settings[setting][subSetting] = parseInt(input.value);
-                            }
-                        });
-
-                        
-
+                        fieldset.append(this.settingField(setting, subSetting));
                     }
                 }
-
                 form.append(fieldset);
             }
         }
-        document.body.append(form);*/
-
-        /*let form = dom(document.body, "form");
         
-        let fieldset = dom(form, "fieldset");
-        let legend = dom(fieldset, "legend", {
-            "innerHTML": "Test"
-        });
-
-        let input = dom(fieldset, "input", {
-            "type": "text",
-            "value": "test"
-        },
-        {
-            "change": (element) => {
-                console.log(element.value);
-            }
-        });*/
-
-        let form = dom("form", {"id": "form"});
         document.body.append(form);
+    };
 
-        let startButton = dom("input", {"type": "button", "value": "start !"}, {
-            "click": () => {
-                this.start();
-            }
-        });
-        form.append(startButton);
-        
-        let randomField = dom("div", {"class": "field"});
-        form.append(randomField);
+    App.prototype.settingField = function(setting, subSetting){
+        let settingValue = this.settings[setting][subSetting];
+        let settingType = typeof settingValue;
+        let inputType = (settingType === "boolean") ? "checkbox" : "tel";
+        let inputId = "input-"+setting+"-"+subSetting;
 
-        let randomInput = dom("input", {"type": "tel", "id": "input_random"});
-        let randomLabel = dom("label", {"textContent": "test", "for": randomInput.id});
-        randomField.append(randomLabel);
-        randomField.append(randomInput);
-        
-        
-
-        /*let startButton = dom("input", {"type": "checkbox", "checked": true}, {
-            "change": (element) => {
-                this.settings.random = element.checked;
-            }
-        });
-        form.append(startButton);*/
-
-
-
-
-
-
+        let field = dom("div", {"class": "field"});
+        field.append(
+            dom("label", {"textContent": subSetting, "for": inputId}),
+            dom("input", {"type": inputType, "id": inputId, "value": settingValue}, {
+                "change": (element) => {
+                    if(inputType === "tel") element.value = element.value.replace(/[^\d]/g, "");
+                    this.settings[setting][subSetting] = (inputType === "checkbox") ? element.checked : parseInt(element.value);
+                }
+            })
+        );
+        return field;
     };
     
     App.prototype.init = function(){
@@ -202,7 +152,7 @@ let App = (() => {
     };
 
     App.prototype.random = function(max){
-        let x = (this.settings.random) ? Math.random()*max : rng()*max;
+        let x = (this.settings.main.random) ? Math.random()*max : rng()*max;
         return Math.round(x);
     };
 
