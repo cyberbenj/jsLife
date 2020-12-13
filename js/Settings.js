@@ -6,9 +6,9 @@ const SETTINGS = (() => {
             random: false
         };
         this.canvas = {
+            color: [255, 255, 255],
             width: 64,
-            height: 64,
-            backgroundColor: [255, 255, 255]
+            height: 64
         };
         this.vegetable = {
             color: [0, 255, 0],

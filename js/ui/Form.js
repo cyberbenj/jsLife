@@ -22,9 +22,7 @@ const FORM = (() => {
         let tabId = 0;
         let settings = Object.keys(SETTINGS);
         for(let setting of settings){
-            let type = typeof SETTINGS[setting];
-            
-            if(type === "object" && setting !== "canvas"){
+            if(setting !== "canvas"){
                 let tabClass = (tabId === 0) ? "tab active" : "tab";
                 let tab = dom("div", {"class": tabClass, "textContent": setting, "tab-id": tabId}, {
                     "click": (element) => {

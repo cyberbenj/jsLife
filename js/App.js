@@ -33,6 +33,7 @@ const APP = (() => {
     App.prototype.start = function(){
         FORM.get().style.display = "none";
         CANVAS.get().style.display = "";
+        CANVAS.resize(SETTINGS.canvas);
         
         let entities = [{setting: "vegetable", object: "Vegetable"}, {setting: "herbivorous", object: "Animal"}, {setting: "carnivorous", object: "Animal"}];
         for(let entity of entities){

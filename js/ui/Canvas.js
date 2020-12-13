@@ -8,7 +8,7 @@ const CANVAS = (() => {
         this.id = id;
         this.width = settings.width;
         this.height = settings.height;
-        this.backgroundColor = settings.backgroundColor;
+        this.backgroundColor = settings.color;
         
         let canvas = dom("canvas", {"id": "canvas", "width": this.width, "height": this.height}, {
             "click": (element) => {
@@ -28,6 +28,15 @@ const CANVAS = (() => {
         let maxHeight = Math.floor(window.innerHeight/this.height);
         let zoom = Math.max(Math.min(maxWidth, maxHeight), 1);
         this.get().style.transform = "scale("+zoom+")";
+    };
+
+    Canvas.prototype.resize = function(settings){
+        this.width = settings.width;
+        this.height = settings.height;
+        
+        let canvas = this.get();
+        canvas.width = this.width;
+        canvas.height = this.height;
     };
     
     Canvas.prototype.clear = function(){
