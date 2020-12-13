@@ -22,7 +22,8 @@ form{
     flex-direction: column;
     width: calc(100% - 40px);
     max-width: 300px;
-    min-height: calc(100% - 40px);
+    /*min-height: calc(100% - 40px);*/
+    min-height: 400px;
 }
 
 form .field{

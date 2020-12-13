@@ -41,11 +41,12 @@ let App = (() => {
             }
         };
         this.canvas = null;
+        this.requestAnimationFrame = null;
         this.vegetables = [];
         this.animals = [];
     }
 
-    App.prototype.showSettings = function(){
+    App.prototype.initForm = function(){
         let form = dom("form", {"id": "form"});
         form.append(
             dom("input", {"type": "button", "value": "start !"}, {
@@ -78,7 +79,7 @@ let App = (() => {
                 let subSettings = Object.keys(this.settings[setting]);
                 for(let subSetting of subSettings){
                     if(subSetting !== "color"){
-                        tabContent.append(this.settingField(setting, subSetting));
+                        tabContent.append(this.initField(setting, subSetting));
                     }
                 }
                 form.append(tabContent);
@@ -103,7 +104,7 @@ let App = (() => {
         }
     };
 
-    App.prototype.settingField = function(setting, subSetting){
+    App.prototype.initField = function(setting, subSetting){
         let settingValue = this.settings[setting][subSetting];
         let settingType = typeof settingValue;
         let inputType = (settingType === "boolean") ? "checkbox" : "tel";
@@ -122,17 +123,34 @@ let App = (() => {
         return field;
     };
     
+    App.prototype.initCanvas = function(){
+        let canvasSettings = this.settings.canvas;
+        this.canvas = new Canvas(document.body, "canvas", canvasSettings.width, canvasSettings.height, canvasSettings.backgroundColor);
+    };
+
+    App.prototype.showForm = function(){
+        this.canvas.get().style.display = "none";
+        document.getElementById("form").style.display = "";
+    };
+
     App.prototype.init = function(){
         document.title = this.name;
-        this.showSettings();
+
+        this.initForm();
+        this.initCanvas();
+        this.showForm();
+    };
+
+    App.prototype.stop = function(){
+        cancelAnimationFrame(this.requestAnimationFrame);
+        this.showForm();
     };
 
     App.prototype.start = function(){
         document.getElementById("form").style.display = "none";
+        this.canvas.get().style.display = "";
         
-        let canvasSettings = this.settings.canvas;
-        this.canvas = new Canvas(document.body, "canvas", canvasSettings.width, canvasSettings.height, canvasSettings.backgroundColor);
-        
+        rng_seed = 1;
         this.vegetables = [];
         this.animals = [];
 
@@ -175,7 +193,7 @@ let App = (() => {
     };
 
     App.prototype.loop = function(){
-        requestAnimationFrame(() => this.loop());
+        this.requestAnimationFrame = requestAnimationFrame(() => this.loop());
         this.update();
         this.render();
     };

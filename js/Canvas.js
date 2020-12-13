@@ -11,7 +11,11 @@ function Canvas(parent, id, width = 0, height = 0, backgroundColor){
 }
 
 Canvas.prototype.init = function(){
-    let canvas = dom("canvas", {"id": "canvas", "width": this.width, "height": this.height});
+    let canvas = dom("canvas", {"id": "canvas", "width": this.width, "height": this.height}, {
+        "click": (element) => {
+            App.stop();
+        }
+    });
     this.parent.append(canvas);
 };
 
