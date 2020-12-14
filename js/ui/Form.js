@@ -23,8 +23,10 @@ const FORM = (() => {
         let settings = Object.keys(SETTINGS);
         for(let setting of settings){
             if(setting !== "canvas"){
+                if(tabId > 0) tabs.append(dom("span", {"class": "delimiter", textContent: "|"}));
+
                 let tabClass = (tabId === 0) ? "tab active" : "tab";
-                let tab = dom("div", {"class": tabClass, "textContent": setting, "tab-id": tabId}, {
+                let tab = dom("span", {"class": tabClass, "textContent": setting, "tab-id": tabId}, {
                     "click": (element) => {
                         this.setTab(element.getAttribute("tab-id"));
                     }
@@ -44,8 +46,14 @@ const FORM = (() => {
                 tabId += 1;
             }
         }
-
         document.body.append(form);
+
+        let random_checkbox = document.getElementById("input-main-random");
+        random_checkbox.addEventListener("change", () => {
+            let rng_seed_input = document.getElementById("input-main-rng_seed");
+            let field = rng_seed_input.parentElement;
+            field.style.display= (random_checkbox.checked) ? "none" : "";
+        });
     };
 
     Form.prototype.setTab = function(id){
@@ -73,7 +81,7 @@ const FORM = (() => {
             dom("label", {"textContent": subSetting, "for": inputId}),
             dom("input", {"type": inputType, "id": inputId, "value": settingValue}, {
                 "change": (element) => {
-                    if(inputType === "tel") element.value = element.value.replace(/[^\d]/g, "");
+                    if(inputType === "tel") element.value = absInt(element.value);
                     SETTINGS[setting][subSetting] = (inputType === "checkbox") ? element.checked : parseInt(element.value);
                 }
             })

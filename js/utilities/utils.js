@@ -1,6 +1,6 @@
 "use strict";
 
-let rng_seed = 1;
+let rng_seed = 0;
 
 function rng(){
     let x = Math.sin(rng_seed++)*10000;
@@ -13,6 +13,12 @@ function distance(start, end){
 
 function radian(start, end){
     return Math.atan2(end[1]-start[1], end[0]-start[0]);
+}
+
+function absInt(x){
+    x = parseInt(x);
+    x = (!isNaN(x)) ? Math.abs(x) : 0;
+    return x;
 }
 
 function dom(type, attributes = null, events = null){

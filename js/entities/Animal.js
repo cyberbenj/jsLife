@@ -8,10 +8,12 @@ function Animal(position, isCarnivorous, settings){
     if(SETTINGS.main.random) this.death += APP.random(this.death);
     this.life = 0;
     this.health = settings.health;
-    this.hunger = settings.hunger;
+    this.hunger = 0;
+    this.hungry = settings.hungry;
     this.breeding = settings.breeding;
     this.broods =  settings.broods;
     this.fieldOfView = settings.FOV;
+    this.speed = settings.speed;
     this.target = position;
     this.targetEntity = null;
 }
@@ -22,17 +24,17 @@ Animal.prototype.render = function(){
 
 Animal.prototype.update = function(){
     this.life += 1;
-    this.health -= 1;
+    this.hunger += 1;
 
     if(this.life < this.death && this.health > 0){
-        if(this.life%this.breeding === 0){
-		    this.breed();
-        }
-        
-        if(this.health < this.hunger){
+        if(this.hunger >= this.hungry){
             this.hunt();
+            this.health -= 1;
+        }else{
+            if(this.life%this.breeding === 0){
+                this.breed();
+            }
         }
-        
         this.move();
     }else{
         this.die();
@@ -66,19 +68,22 @@ Animal.prototype.move = function(){
         if(this.targetEntity instanceof Vegetable){
             APP.vegetables.splice(APP.vegetables.indexOf(this.targetEntity), 1);
             this.health = SETTINGS.herbivorous.health;
+            this.hunger = 0;
         }
 
         if(this.targetEntity instanceof Animal){
             APP.animals.splice(APP.animals.indexOf(this.targetEntity), 1);
             this.health = SETTINGS.carnivorous.health;
+            this.hunger = 0;
         }
-        
+
         this.target = CANVAS.getRandomPosition();
         this.targetEntity = null;
     }
 
     let r = radian(this.position, this.target);
-    let speed = 0.2;
+    let speed = Math.min(distance(this.position, this.target), this.speed/10);
+
     this.position[0] += Math.cos(r)*speed;
     this.position[1] += Math.sin(r)*speed;
 };
@@ -88,11 +93,18 @@ Animal.prototype.breed = function(){
     let settings = (this.isCarnivorous) ? SETTINGS.carnivorous : SETTINGS.herbivorous;
 	while(broods > 0){
         APP.animals.push(new Animal([...this.position], this.isCarnivorous, settings));
+        if(this.isCarnivorous){
+            APP.carnivorousCount += 1;
+        }else APP.herbivorousCount += 1;
 		broods -= 1;
 	}
 };
 
 Animal.prototype.die = function(){
+    if(this.isCarnivorous){
+        APP.carnivorousCount -= 1;
+    }else APP.herbivorousCount -= 1;
+    
     let key = APP.animals.indexOf(this);
     APP.animals.splice(key, 1);
 };

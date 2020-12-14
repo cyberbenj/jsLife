@@ -1,3 +1,8 @@
+*{
+    font-family: Consolas;
+    font-size: 12pt;
+}
+
 html,body{
     margin: 0px;
     padding: 0px;
@@ -10,6 +15,7 @@ body{
     justify-content: center;
     align-items: center;
     background-color:#777;
+    overflow-x: hidden;
 }
 
 canvas{
@@ -21,9 +27,9 @@ form{
     display: flex;
     flex-direction: column;
     width: calc(100% - 40px);
-    max-width: 300px;
-    /*min-height: calc(100% - 40px);*/
-    min-height: 400px;
+    max-width: 400px;
+    align-self: start;
+    padding: 20px 0;
 }
 
 form .field{
@@ -32,10 +38,6 @@ form .field{
     width: 100%;
     align-items: center;
     padding-top: 10px;
-}
-
-form .field:last-child{
-    padding-bottom: 10px;
 }
 
 form .field label{
@@ -52,11 +54,16 @@ form .field input[type="tel"]{
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
+    padding-top: 10px;
+}
+
+#tabs .delimiter{
+    color: rgba(0, 0, 0, 0.3);
 }
 
 #tabs .tab{
     display: flex;
-    padding: 10px 0;
+    /*padding: 10px 0;*/
     cursor: pointer;
     color: rgba(0, 0, 0, 0.3);
 }

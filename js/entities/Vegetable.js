@@ -31,12 +31,15 @@ Vegetable.prototype.spread = function(){
         let seeds = (SETTINGS.main.random) ? APP.random(this.seeds) : this.seeds;
         while(seeds > 0){
             APP.vegetables.push(new Vegetable(CANVAS.getRandomPosition(), SETTINGS.vegetable));
+            APP.vegetablesCount += 1;
             seeds -= 1;
         }
     }
 }
 
 Vegetable.prototype.die = function(){
+    APP.vegetablesCount -= 1;
+
     let key = APP.vegetables.indexOf(this);
     APP.vegetables.splice(key, 1);
 };

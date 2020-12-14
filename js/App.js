@@ -6,6 +6,22 @@ const APP = (() => {
         this.requestAnimationFrame = null;
         this.vegetables = [];
         this.animals = [];
+
+        this.vegetablesCount = 0;
+        this.herbivorousCount = 0;
+        this.carnivorousCount = 0;
+
+        this.timer = null;
+        this.time = 0;
+
+        this.chartData = {
+            labels: [],
+            datasets : [
+                {label: "vegetables", fill: false, borderColor: "rgb("+SETTINGS.vegetable.color.join(", ")+")", data: []},
+                {label: "herbivorous", fill: false, borderColor: "rgb("+SETTINGS.herbivorous.color.join(", ")+")", data: []},
+                {label: "carnivorous", fill: false, borderColor: "rgb("+SETTINGS.carnivorous.color.join(", ")+")", data: []}
+            ]
+        };
     }
 
     App.prototype.init = function(){
@@ -20,17 +36,45 @@ const APP = (() => {
 
     App.prototype.stop = function(){
         cancelAnimationFrame(this.requestAnimationFrame);
+        clearInterval(this.timer);
+
+        //let chart = {type: "bar", data: this.chartData};
+        let chart = {type: "line", data: this.chartData};
+        let json = JSON.stringify(chart);
+        let quickchart = window.open("https://quickchart.io/chart?c="+encodeURI(json), "_blank");
+        quickchart.focus();
+
         this.reset();
         this.showForm();
     };
 
     App.prototype.reset = function(){
-        rng_seed = 1;
         this.vegetables = [];
         this.animals = [];
+        
+        this.vegetablesCount = 0;
+        this.herbivorousCount = 0;
+        this.carnivorousCount = 0;
+
+        this.chartData = {
+            labels: [],
+            datasets : [
+                {label: "vegetables", fill: false, borderColor: "rgb("+SETTINGS.vegetable.color.join(", ")+")", data: []},
+                {label: "herbivorous", fill: false, borderColor: "rgb("+SETTINGS.herbivorous.color.join(", ")+")", data: []},
+                {label: "carnivorous", fill: false, borderColor: "rgb("+SETTINGS.carnivorous.color.join(", ")+")", data: []}
+            ]
+        };
+
+        this.timer = null;
+        this.time = 0;
     };
 
     App.prototype.start = function(){
+        rng_seed = SETTINGS.main.rng_seed;
+        this.vegetablesCount = SETTINGS.vegetable.spawn;
+        this.herbivorousCount = SETTINGS.herbivorous.spawn;
+        this.carnivorousCount = SETTINGS.carnivorous.spawn;
+
         FORM.get().style.display = "none";
         CANVAS.get().style.display = "";
         CANVAS.resize(SETTINGS.canvas);
@@ -45,6 +89,17 @@ const APP = (() => {
                 spawn -= 1;
             }
         }
+
+        this.timer = setInterval(() => {
+            this.time += 1;
+            //console.log(this.time);
+
+            this.chartData.labels.push(this.time); // start before setInterval !!! or it will count only after 1 second...
+            this.chartData.datasets[0].data.push(this.vegetablesCount);
+            this.chartData.datasets[1].data.push(this.herbivorousCount);
+            this.chartData.datasets[2].data.push(this.carnivorousCount);
+
+        },1000);
         
         this.run();
     };
