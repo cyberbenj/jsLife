@@ -22,14 +22,17 @@ Animal.prototype.render = function(){
     CANVAS.drawPixel(this.position, this.color);
 };
 
-Animal.prototype.update = function(){
-    this.life += 1;
-    this.hunger += 1;
+Animal.prototype.update = function(up){
+    if(up){
+        this.life += 1;
+        this.hunger += 1;
+    }
+    
 
     if(this.life < this.death && this.health > 0){
         if(this.hunger >= this.hungry){
             this.hunt();
-            this.health -= 1;
+            if(up) this.health -= 1;
         }else{
             if(this.life%this.breeding === 0){
                 this.breed();

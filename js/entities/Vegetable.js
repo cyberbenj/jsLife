@@ -14,8 +14,8 @@ Vegetable.prototype.render = function(){
     CANVAS.drawPixel(this.position, this.color);
 };
 
-Vegetable.prototype.update = function(){
-    this.life += 1;
+Vegetable.prototype.update = function(up){
+    if(up) this.life += 1;
 
     if(this.life < this.death){
         if(this.life%this.seeding === 0 && APP.animals.length > 0){

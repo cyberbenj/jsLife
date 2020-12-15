@@ -39,7 +39,7 @@ const APP = (() => {
         clearInterval(this.timer);
 
         //let chart = {type: "bar", data: this.chartData};
-        /*let chart = {type: "line", data: this.chartData};*/
+        let chart = {type: "line", data: this.chartData};
 
         /*let chart = {
             type: "outlabeledPie",
@@ -65,6 +65,7 @@ const APP = (() => {
             }
         };*/
 
+        /*
         let chart = {
             type: "doughnut",
             data: {
@@ -89,6 +90,7 @@ const APP = (() => {
                 }
             }
         };
+        */
 
         let json = JSON.stringify(chart);
         let quickchart = window.open("https://quickchart.io/chart?c="+encodeURI(json), "_blank");
@@ -141,11 +143,13 @@ const APP = (() => {
         }
 
         this.countLives();
-        this.timer = setInterval(() => {
+        /*this.timer = setInterval(() => {
             this.time += 1;
             this.countLives();
-        },1000);
+        },1000);*/
         
+        //this.time_ = performance.now();
+        this.time_ = 0;
         this.run();
     };
 
@@ -166,10 +170,10 @@ const APP = (() => {
         this.chartData.datasets[2].data.push(carnivorous);
     };
 
-    App.prototype.update = function(){
+    App.prototype.update = function(up){
         let entities = this.vegetables.concat(this.animals);
         for(let entity of entities){
-            entity.update();
+            entity.update(up);
         }
     };
 
@@ -183,10 +187,37 @@ const APP = (() => {
         }
     };
 
-    App.prototype.run = function(){
-        this.requestAnimationFrame = requestAnimationFrame(() => this.run());
-        this.update();
+    App.prototype.run = function(now){
+        this.requestAnimationFrame = requestAnimationFrame((now) => this.run(now));
+        //this.update();
+        //this.render();
+        //console.log(now);
+
+
+
+        //let last = Math.trunc(this.time_)/1000;
+        //let now = Math.trunc((performance.now()-this.time_)/1000);
+
+        /*if(last-now === 1){
+            console.log(now);
+        }*/
+        //console.log(now);
+
+        //console.log(Math.trunc((performance.now()-this.time_)/1000));
+        
+        let up = false;
+        
+        if(now-this.time_ >= 1000){
+            this.time_ = now;
+            this.time += 1;
+
+            this.countLives();
+            up = true;
+        }
+
+        this.update(up);
         this.render();
+        
     };
 
     App.prototype.random = function(max){
