@@ -101,9 +101,9 @@ Animal.prototype.breed = function(){
 };
 
 Animal.prototype.die = function(){
-    if(this.isCarnivorous){
+    /*if(this.isCarnivorous){
         APP.carnivorousCount -= 1;
-    }else APP.herbivorousCount -= 1;
+    }else APP.herbivorousCount -= 1;*/
     
     let key = APP.animals.indexOf(this);
     APP.animals.splice(key, 1);

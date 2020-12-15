@@ -38,7 +38,7 @@ Vegetable.prototype.spread = function(){
 }
 
 Vegetable.prototype.die = function(){
-    APP.vegetablesCount -= 1;
+    //APP.vegetablesCount -= 1;
 
     let key = APP.vegetables.indexOf(this);
     APP.vegetables.splice(key, 1);
