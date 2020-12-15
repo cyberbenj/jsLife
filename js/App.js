@@ -11,17 +11,19 @@ const APP = (() => {
         this.herbivorousCount = 0;
         this.carnivorousCount = 0;
 
-        this.timer = null;
+        this.timer = 0;
         this.time = 0;
 
-        this.chartData = {
-            labels: [],
-            datasets : [
-                {label: "vegetables", fill: false, borderColor: "rgb("+SETTINGS.vegetable.color.join(", ")+")", data: []},
-                {label: "herbivorous", fill: false, borderColor: "rgb("+SETTINGS.herbivorous.color.join(", ")+")", data: []},
-                {label: "carnivorous", fill: false, borderColor: "rgb("+SETTINGS.carnivorous.color.join(", ")+")", data: []}
-            ]
-        };
+        /*this.chart = new Chart("line");
+        this.chart.initDataset("vegetables", "rgb("+SETTINGS.vegetable.color.join(", ")+")");
+        this.chart.initDataset("herbivorous", "rgb("+SETTINGS.herbivorous.color.join(", ")+")");
+        this.chart.initDataset("carnivorous", "rgb("+SETTINGS.carnivorous.color.join(", ")+")");*/
+
+        this.chart = new Chart("line", [
+            {label: "vegetables", color: "rgb("+SETTINGS.vegetable.color.join(", ")+")"},
+            {label: "herbivorous", color: "rgb("+SETTINGS.herbivorous.color.join(", ")+")"},
+            {label: "carnivorous", color: "rgb("+SETTINGS.carnivorous.color.join(", ")+")"}
+        ]);
     }
 
     App.prototype.init = function(){
@@ -36,66 +38,8 @@ const APP = (() => {
 
     App.prototype.stop = function(){
         cancelAnimationFrame(this.requestAnimationFrame);
-        clearInterval(this.timer);
 
-        //let chart = {type: "bar", data: this.chartData};
-        let chart = {type: "line", data: this.chartData};
-
-        /*let chart = {
-            type: "outlabeledPie",
-            data: {
-                labels: ["vegetables", "herbivorous", "carnivorous"],
-                datasets: [{
-                    backgroundColor: [
-                        "rgb("+SETTINGS.vegetable.color.join(", ")+")",
-                        "rgb("+SETTINGS.herbivorous.color.join(", ")+")",
-                        "rgb("+SETTINGS.carnivorous.color.join(", ")+")"
-                    ],
-                    data: [this.vegetablesCount, this.herbivorousCount, this.carnivorousCount]
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: false,
-                    outlabels: {
-                        text: "%l %p",
-                        color: "white"
-                    }
-                }
-            }
-        };*/
-
-        /*
-        let chart = {
-            type: "doughnut",
-            data: {
-                labels: ["vegetables", "herbivorous", "carnivorous"],
-                datasets: [{
-                    backgroundColor: [
-                        "rgb("+SETTINGS.vegetable.color.join(", ")+")",
-                        "rgb("+SETTINGS.herbivorous.color.join(", ")+")",
-                        "rgb("+SETTINGS.carnivorous.color.join(", ")+")"
-                    ],
-                    data: [this.vegetablesCount, this.herbivorousCount, this.carnivorousCount]
-                }]
-            },
-            options: {
-                plugins: {
-                    doughnutlabel: {
-                        labels: [
-                            {text: (this.vegetablesCount+this.herbivorousCount+this.carnivorousCount), font: {size: 20}},
-                            {text: "total"}
-                        ]
-                    }
-                }
-            }
-        };
-        */
-
-        let json = JSON.stringify(chart);
-        let quickchart = window.open("https://quickchart.io/chart?c="+encodeURI(json), "_blank");
-        quickchart.focus();
-
+        this.chart.render();
         this.reset();
         this.showForm();
     };
@@ -103,29 +47,13 @@ const APP = (() => {
     App.prototype.reset = function(){
         this.vegetables = [];
         this.animals = [];
-        
-        this.vegetablesCount = 0;
-        this.herbivorousCount = 0;
-        this.carnivorousCount = 0;
 
-        this.chartData = {
-            labels: [],
-            datasets : [
-                {label: "vegetables", fill: false, borderColor: "rgb("+SETTINGS.vegetable.color.join(", ")+")", data: []},
-                {label: "herbivorous", fill: false, borderColor: "rgb("+SETTINGS.herbivorous.color.join(", ")+")", data: []},
-                {label: "carnivorous", fill: false, borderColor: "rgb("+SETTINGS.carnivorous.color.join(", ")+")", data: []}
-            ]
-        };
-
-        this.timer = null;
+        this.chart.reset();
         this.time = 0;
     };
 
     App.prototype.start = function(){
         rng_seed = SETTINGS.main.rng_seed;
-        this.vegetablesCount = SETTINGS.vegetable.spawn;
-        this.herbivorousCount = SETTINGS.herbivorous.spawn;
-        this.carnivorousCount = SETTINGS.carnivorous.spawn;
 
         FORM.get().style.display = "none";
         CANVAS.get().style.display = "";
@@ -143,13 +71,7 @@ const APP = (() => {
         }
 
         this.countLives();
-        /*this.timer = setInterval(() => {
-            this.time += 1;
-            this.countLives();
-        },1000);*/
-        
-        //this.time_ = performance.now();
-        this.time_ = 0;
+        this.timer = 0;
         this.run();
     };
 
@@ -164,10 +86,8 @@ const APP = (() => {
             }else herbivorous += 1;
         }
 
-        this.chartData.labels.push(this.time);
-        this.chartData.datasets[0].data.push(vegetables);
-        this.chartData.datasets[1].data.push(herbivorous);
-        this.chartData.datasets[2].data.push(carnivorous);
+        this.chart.updateLabels(this.time);
+        this.chart.updateDataset([vegetables, herbivorous, carnivorous]);
     };
 
     App.prototype.update = function(up){
@@ -189,35 +109,18 @@ const APP = (() => {
 
     App.prototype.run = function(now){
         this.requestAnimationFrame = requestAnimationFrame((now) => this.run(now));
-        //this.update();
-        //this.render();
-        //console.log(now);
 
-
-
-        //let last = Math.trunc(this.time_)/1000;
-        //let now = Math.trunc((performance.now()-this.time_)/1000);
-
-        /*if(last-now === 1){
-            console.log(now);
-        }*/
-        //console.log(now);
-
-        //console.log(Math.trunc((performance.now()-this.time_)/1000));
-        
         let up = false;
-        
-        if(now-this.time_ >= 1000){
-            this.time_ = now;
+        if(now-this.timer >= 1000){
+            this.timer = now;
             this.time += 1;
-
-            this.countLives();
             up = true;
         }
 
         this.update(up);
         this.render();
-        
+
+        if(up) this.countLives();        
     };
 
     App.prototype.random = function(max){

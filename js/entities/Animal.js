@@ -26,22 +26,23 @@ Animal.prototype.update = function(up){
     if(up){
         this.life += 1;
         this.hunger += 1;
-    }
-    
 
-    if(this.life < this.death && this.health > 0){
         if(this.hunger >= this.hungry){
-            this.hunt();
-            if(up) this.health -= 1;
+            this.health -= 1;
         }else{
             if(this.life%this.breeding === 0){
                 this.breed();
             }
         }
-        this.move();
-    }else{
-        this.die();
     }
+    
+    let alive = (this.life < this.death && this.health > 0);
+    let hungry = (this.hunger >= this.hungry);
+
+    if(alive){
+        if(hungry) this.hunt();
+        this.move();
+    }else this.die();
 };
 
 Animal.prototype.hunt = function(){
@@ -96,18 +97,11 @@ Animal.prototype.breed = function(){
     let settings = (this.isCarnivorous) ? SETTINGS.carnivorous : SETTINGS.herbivorous;
 	while(broods > 0){
         APP.animals.push(new Animal([...this.position], this.isCarnivorous, settings));
-        if(this.isCarnivorous){
-            APP.carnivorousCount += 1;
-        }else APP.herbivorousCount += 1;
 		broods -= 1;
 	}
 };
 
 Animal.prototype.die = function(){
-    /*if(this.isCarnivorous){
-        APP.carnivorousCount -= 1;
-    }else APP.herbivorousCount -= 1;*/
-    
     let key = APP.animals.indexOf(this);
     APP.animals.splice(key, 1);
 };

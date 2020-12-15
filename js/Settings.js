@@ -14,17 +14,17 @@ const SETTINGS = (() => {
         this.vegetable = {
             color: [0, 255, 0],
             spawn: 5,
-            death: 1000,
-            seeding: 700,
+            death: 50,
+            seeding: 10,
             seeds: 2
         };
         this.herbivorous = {
             color: [0, 0, 255],
             spawn: 2,
-            death: 1000,
-            health: 200,
-            hungry: 200,
-            breeding: 500,
+            death: 20,
+            health: 5,
+            hungry: 7,
+            breeding: 10,
             broods: 2,
             FOV: 8,
             speed: 5
@@ -32,10 +32,10 @@ const SETTINGS = (() => {
         this.carnivorous = {
             color: [255, 0, 0],
             spawn: 1,
-            death: 1000,
-            health: 200,
-            hungry: 200,
-            breeding: 700,
+            death: 20,
+            health: 5,
+            hungry: 7,
+            breeding: 10,
             broods: 2,
             FOV: 8,
             speed: 5

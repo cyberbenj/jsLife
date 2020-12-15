@@ -63,7 +63,6 @@ form .field input[type="tel"]{
 
 #tabs .tab{
     display: flex;
-    /*padding: 10px 0;*/
     cursor: pointer;
     color: rgba(0, 0, 0, 0.3);
 }
