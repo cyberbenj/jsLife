@@ -7,9 +7,11 @@ const FORM = (() => {
         this.parent = parent;
         this.id = id;
         
-        let form = dom("form", {"id": this.id});
+        //let form = dom("form", {"id": this.id});
+        let form = dom("form", {"id": this.id, "class": "container"});
         form.append(
-            dom("input", {"type": "button", "value": "start !"}, {
+            //dom("input", {"type": "button", "value": "start !"}, {
+            dom("a", {"class": "button is-primary", "textContent": "start !"}, {
                 "click": () => {
                     APP.start();
                 }

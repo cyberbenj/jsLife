@@ -6,7 +6,8 @@ function Chart(type, datasets){
         data:{
             labels: [],
             datasets : []
-        }
+        },
+        options:{}
     };
 
     this.init(datasets);
@@ -23,22 +24,8 @@ Chart.prototype.init = function(datasets){
     }
 };
 
-/*
-Chart.prototype.initDataset = function(label, color){
-    this.chart.data.datasets.push({
-        label: label,
-        fill: false,
-        borderColor: color,
-        data: []
-    });
-};
-*/
-
-Chart.prototype.updateLabels = function(label){
+Chart.prototype.update = function(label, datas){
     this.chart.data.labels.push(label);
-};
-
-Chart.prototype.updateDataset = function(datas){
     for(let data in datas){
         this.chart.data.datasets[data].data.push(datas[data]);
     }
@@ -52,5 +39,7 @@ Chart.prototype.render = function(){
 
 Chart.prototype.reset = function(){
     this.chart.data.labels = [];
-    this.chart.data.datasets = [];
+    for(let dataset of this.chart.data.datasets){
+        dataset.data = [];
+    }
 };

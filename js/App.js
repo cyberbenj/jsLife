@@ -14,11 +14,6 @@ const APP = (() => {
         this.timer = 0;
         this.time = 0;
 
-        /*this.chart = new Chart("line");
-        this.chart.initDataset("vegetables", "rgb("+SETTINGS.vegetable.color.join(", ")+")");
-        this.chart.initDataset("herbivorous", "rgb("+SETTINGS.herbivorous.color.join(", ")+")");
-        this.chart.initDataset("carnivorous", "rgb("+SETTINGS.carnivorous.color.join(", ")+")");*/
-
         this.chart = new Chart("line", [
             {label: "vegetables", color: "rgb("+SETTINGS.vegetable.color.join(", ")+")"},
             {label: "herbivorous", color: "rgb("+SETTINGS.herbivorous.color.join(", ")+")"},
@@ -86,8 +81,7 @@ const APP = (() => {
             }else herbivorous += 1;
         }
 
-        this.chart.updateLabels(this.time);
-        this.chart.updateDataset([vegetables, herbivorous, carnivorous]);
+        this.chart.update(this.time, [vegetables, herbivorous, carnivorous]);
     };
 
     App.prototype.update = function(up){
@@ -134,5 +128,6 @@ const APP = (() => {
 window.onload = () => {
     CANVAS.init(document.body, "canvas", SETTINGS.canvas);
     FORM.init(document.body, "form");
+    //FORM.init(document.getElementById("app"), "form");
     APP.init();
 };
