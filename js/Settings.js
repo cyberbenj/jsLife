@@ -7,7 +7,7 @@ const SETTINGS = (() => {
             rng_seed: 0
         };
         this.canvas = {
-            color: [255, 255, 255],
+            color: [222, 222, 222],
             width: 64,
             height: 64
         };

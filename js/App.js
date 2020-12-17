@@ -3,6 +3,7 @@ const APP = (() => {
     
     function App(){
         this.name = "jsLife";
+        this.description = "a sim about life and death.";
         this.requestAnimationFrame = null;
         this.vegetables = [];
         this.animals = [];
@@ -101,7 +102,8 @@ const APP = (() => {
     };
 
     App.prototype.render = function(){
-        CANVAS.zoom();
+        // TODO : use bulma Image modal ?
+        //CANVAS.zoom();
         CANVAS.clear();
 
         let entities = this.vegetables.concat(this.animals);
@@ -135,8 +137,8 @@ const APP = (() => {
 })();
 
 window.onload = () => {
-    CANVAS.init(document.body, "canvas", SETTINGS.canvas);
-    FORM.init(document.body, "form");
-    //FORM.init(document.getElementById("app"), "form");
+    let app = document.getElementById("app");
+    CANVAS.init(app, "canvas", SETTINGS.canvas);
+    FORM.init(app, "form");
     APP.init();
 };

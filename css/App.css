@@ -1,81 +1,16 @@
-*{
-    font-family: Consolas;
-    font-size: 12pt;
-}
-
-html,body{
-    margin: 0px;
-    padding: 0px;
+/*#app{
+    display: flex;
     width: 100vw;
     height: 100vh;
-}
-
-body{
-    display: flex;
     justify-content: center;
     align-items: center;
-    background-color:#777;
-    overflow-x: hidden;
 }
 
-canvas{
+#app #form{
+    align-self: start;
+}*/
+
+#app canvas{
     image-rendering: -moz-crisp-edges;
     image-rendering: pixelated;
-}
-
-form{
-    display: flex;
-    flex-direction: column;
-    width: calc(100% - 40px);
-    max-width: 400px;
-    align-self: start;
-    padding: 20px 0;
-}
-
-form .field{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    align-items: center;
-    padding-top: 10px;
-}
-
-form .field label{
-    width: 100%;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-form .field input[type="tel"]{
-    width: 100%;
-}
-
-#tabs{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    justify-content: space-between;
-    padding-top: 10px;
-}
-
-#tabs .delimiter{
-    color: rgba(0, 0, 0, 0.3);
-}
-
-#tabs .tab{
-    display: flex;
-    cursor: pointer;
-    color: rgba(0, 0, 0, 0.3);
-}
-
-#tabs .tab.active{
-    color: rgba(0, 0, 0, 1);
-}
-
-.tab-content{
-    display: none;
-    flex-direction: column;
-}
-
-.tab-content.active{
-    display: flex;
 }

@@ -22,7 +22,7 @@ function absInt(x){
 }
 
 function dom(type, attributes = null, events = null){
-    let element = document.createElement(type);
+    let element = (type === "text") ? document.createTextNode(attributes["textContent"]) : document.createElement(type);
     
     if(attributes !== null){
         for(let attribute of Object.keys(attributes)){

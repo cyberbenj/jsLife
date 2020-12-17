@@ -7,67 +7,70 @@ const FORM = (() => {
         this.parent = parent;
         this.id = id;
         
-        //let form = dom("form", {"id": this.id});
         let form = dom("form", {"id": this.id, "class": "container"});
+        parent.append(form);
+
         form.append(
-            //dom("input", {"type": "button", "value": "start !"}, {
+            dom("h1", {"class": "title", "textContent": APP.name}),
+            dom("h2", {"class": "subtitle", "textContent": APP.description}),
             dom("a", {"class": "button is-primary", "textContent": "start !"}, {
-                "click": () => {
-                    APP.start();
-                }
+                "click": () => APP.start()
             })
         );
-        
-        let tabs = dom("div", {"id": "tabs"});
+
+        let tabs = dom("div", {"id": "tabs", "class": "tabs"});
         form.append(tabs);
-        
+
+        let ul = dom("ul");
+        tabs.append(ul);
+
         let tabId = 0;
         let settings = Object.keys(SETTINGS);
         for(let setting of settings){
             if(setting !== "canvas"){
-                if(tabId > 0) tabs.append(dom("span", {"class": "delimiter", textContent: "|"}));
 
-                let tabClass = (tabId === 0) ? "tab active" : "tab";
-                let tab = dom("span", {"class": tabClass, "textContent": setting, "tab-id": tabId}, {
-                    "click": (element) => {
-                        this.setTab(element.getAttribute("tab-id"));
-                    }
+                let tabClass = (tabId === 0) ? "tab is-active" : "tab";
+                let tab = dom("li", {"class": tabClass, "tab-id": tabId}, {
+                    "click": (element) => this.setTab(element.getAttribute("tab-id"))
                 });
-                tabs.append(tab);
-                
-                let tabContentClass = (tabId === 0) ? "tab-content active" : "tab-content";
-                let tabContent = dom("div", {"class": tabContentClass, "tab-id": tabId});
+                ul.append(tab);
 
+                let a = dom("a", {"textContent": setting});
+                tab.append(a);
+                
+                let tabContentClass = (tabId === 0) ? "content tab-content" : "content tab-content is-hidden";
+                let tabContent = dom("div", {"class": tabContentClass, "tab-id": tabId});
+                form.append(tabContent);
+                
                 let subSettings = Object.keys(SETTINGS[setting]);
                 for(let subSetting of subSettings){
                     if(subSetting !== "color"){
                         tabContent.append(this.initField(setting, subSetting));
                     }
                 }
-                form.append(tabContent);
+                
                 tabId += 1;
             }
         }
-        document.body.append(form);
 
         let random_checkbox = document.getElementById("input-main-random");
         random_checkbox.addEventListener("change", () => {
             let rng_seed_input = document.getElementById("input-main-rng_seed");
-            let field = rng_seed_input.parentElement;
-            field.style.display= (random_checkbox.checked) ? "none" : "";
+            let field = rng_seed_input.parentElement.parentElement;
+            field.style.display = (random_checkbox.checked) ? "none" : "";
         });
     };
 
     Form.prototype.setTab = function(id){
         let tabs = document.getElementsByClassName("tab");
         for(let tab of tabs){
-            let tabClass = (tab.getAttribute("tab-id") === id) ? "tab active" : "tab";
+            let tabClass = (tab.getAttribute("tab-id") === id) ? "tab is-active" : "tab";
             tab.setAttribute("class", tabClass);
         }
 
         let contents = document.getElementsByClassName("tab-content");
         for(let content of contents){
-            let contentClass = (content.getAttribute("tab-id") === id) ? "tab-content active" : "tab-content";
+            let contentClass = (content.getAttribute("tab-id") === id) ? "content tab-content" : "content tab-content is-hidden";
             content.setAttribute("class", contentClass);
         }
     };
@@ -79,15 +82,44 @@ const FORM = (() => {
         let inputId = "input-"+setting+"-"+subSetting;
 
         let field = dom("div", {"class": "field"});
-        field.append(
-            dom("label", {"textContent": subSetting, "for": inputId}),
-            dom("input", {"type": inputType, "id": inputId, "value": settingValue}, {
-                "change": (element) => {
-                    if(inputType === "tel") element.value = absInt(element.value);
-                    SETTINGS[setting][subSetting] = (inputType === "checkbox") ? element.checked : parseInt(element.value);
-                }
-            })
-        );
+
+        switch(inputType){
+            case "checkbox":
+                var control = dom("div", {"class": "control"});
+                field.append(control);
+            
+                var label = dom("label", {"class": "checkbox"});
+                field.append(label);
+
+                label.append(
+                    dom("input", {"type": "checkbox", "id": inputId}, {
+                        "change": (element) => {
+                            SETTINGS[setting][subSetting] = element.checked;
+                        }
+                    }),
+                    dom("text", {"textContent": " "+subSetting})
+                );
+                control.append(label);
+            break;
+
+            default:
+                var label = dom("label", {"class": "label", "textContent": subSetting, "for": inputId});
+                field.append(label);
+
+                var control = dom("div", {"class": "control"});
+                field.append(control);
+
+                control.append(
+                    dom("input", {"type": inputType, "class": "input", "id": inputId, "value": settingValue}, {
+                        "change": (element) => {
+                            element.value = absInt(element.value);
+                            SETTINGS[setting][subSetting] = parseInt(element.value);
+                        }
+                    })
+                );
+            break;
+        }
+
         return field;
     };
 
