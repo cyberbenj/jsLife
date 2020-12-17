@@ -47,7 +47,7 @@ const APP = (() => {
         this.time = 0;
     };
 
-    App.prototype.start_ = function(){
+    App.prototype.start = function(){
         rng_seed = SETTINGS.main.rng_seed;
 
         FORM.get().style.display = "none";
@@ -70,7 +70,7 @@ const APP = (() => {
         this.run();
     };
 
-    App.prototype.start = function(){
+    App.prototype.start__ = function(){
         fetch('https://quickchart.io/chart/create', {
             method: 'post', headers: {'Content-Type': 'application/json'},
             body: '{"chart": {"type": "bar", "data": {"labels": ["Hello", "World"], "datasets": [{"label": "Foo", "data": [1, 2]}]}}}'
