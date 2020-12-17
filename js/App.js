@@ -47,7 +47,7 @@ const APP = (() => {
         this.time = 0;
     };
 
-    App.prototype.start = function(){
+    App.prototype.start_ = function(){
         rng_seed = SETTINGS.main.rng_seed;
 
         FORM.get().style.display = "none";
@@ -68,6 +68,15 @@ const APP = (() => {
         this.countLives();
         this.timer = 0;
         this.run();
+    };
+
+    App.prototype.start = function(){
+        fetch('https://quickchart.io/chart/create', {
+            method: 'post', headers: {'Content-Type': 'application/json'},
+            body: '{"chart": {"type": "bar", "data": {"labels": ["Hello", "World"], "datasets": [{"label": "Foo", "data": [1, 2]}]}}}'
+        })
+        .then(res => res.json())
+        .then(res => window.open(res.url, "_blank")); // warning : this is bad because it needs user to accept all popups to work... 
     };
 
     App.prototype.countLives = function(){
