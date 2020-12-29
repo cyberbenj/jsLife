@@ -30,9 +30,13 @@ const APP = (() => {
     App.prototype.stop = function(){
         cancelAnimationFrame(this.requestAnimationFrame);
 
+
+
         //this.chart.render();
         this.reset();
-        MODAL.hide();
+        //MODAL.hide();
+        CANVAS.hide();
+        MODAL.show("card");
     };
 
     App.prototype.reset = function(){

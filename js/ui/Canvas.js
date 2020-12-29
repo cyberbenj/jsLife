@@ -10,7 +10,11 @@ const CANVAS = (() => {
         this.height = settings.height;
         this.backgroundColor = settings.color;
         
-        let canvas = dom("canvas", {"id": "canvas", "width": this.width, "height": this.height});
+        let canvas = dom("canvas", {"id": "canvas", "width": this.width, "height": this.height}, {
+            "click": (element) => {
+                APP.stop();
+            }
+        });
         this.parent.append(canvas);
     };
     
