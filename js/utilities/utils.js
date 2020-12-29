@@ -21,6 +21,11 @@ function absInt(x){
     return x;
 }
 
+function rgb(array){
+    let string = "rgb("+array.join(", ")+")";
+    return string;
+}
+
 function dom(type, attributes = null, events = null){
     let element = (type === "text") ? document.createTextNode(attributes["textContent"]) : document.createElement(type);
     

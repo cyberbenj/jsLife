@@ -1,16 +1,12 @@
-/*#app{
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    justify-content: center;
-    align-items: center;
-}
-
-#app #form{
-    align-self: start;
-}*/
-
-#app canvas{
+#app-modal canvas{
     image-rendering: -moz-crisp-edges;
     image-rendering: pixelated;
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    object-fit: contain;
+    z-index: 1000;
+}
+
+.modal-close{
+    z-index: 1001;
 }

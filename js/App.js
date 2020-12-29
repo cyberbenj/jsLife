@@ -16,28 +16,23 @@ const APP = (() => {
         this.time = 0;
 
         this.chart = new Chart("line", [
-            {label: "vegetables", color: "rgb("+SETTINGS.vegetable.color.join(", ")+")"},
-            {label: "herbivorous", color: "rgb("+SETTINGS.herbivorous.color.join(", ")+")"},
-            {label: "carnivorous", color: "rgb("+SETTINGS.carnivorous.color.join(", ")+")"}
+            {label: "vegetables", color: rgb(SETTINGS.vegetable.color)},
+            {label: "herbivorous", color: rgb(SETTINGS.herbivorous.color)},
+            {label: "carnivorous", color: rgb(SETTINGS.carnivorous.color)}
         ]);
     }
 
     App.prototype.init = function(){
         document.title = this.name;
-        this.showForm();
-    };
 
-    App.prototype.showForm = function(){
-        CANVAS.get().style.display = "none";
-        FORM.get().style.display = "";
     };
 
     App.prototype.stop = function(){
         cancelAnimationFrame(this.requestAnimationFrame);
 
-        this.chart.render();
+        //this.chart.render();
         this.reset();
-        this.showForm();
+        MODAL.hide();
     };
 
     App.prototype.reset = function(){
@@ -50,10 +45,7 @@ const APP = (() => {
 
     App.prototype.start = function(){
         rng_seed = SETTINGS.main.rng_seed;
-
-        FORM.get().style.display = "none";
-        CANVAS.get().style.display = "";
-        CANVAS.resize(SETTINGS.canvas);
+        MODAL.show();
         
         let entities = [{setting: "vegetable", object: "Vegetable"}, {setting: "herbivorous", object: "Animal"}, {setting: "carnivorous", object: "Animal"}];
         for(let entity of entities){
@@ -66,7 +58,7 @@ const APP = (() => {
             }
         }
 
-        this.countLives();
+        this.updateChart();
         this.timer = 0;
         this.run();
     };
@@ -80,7 +72,7 @@ const APP = (() => {
         .then(res => window.open(res.url, "_blank")); // warning : this is bad because it needs user to accept all popups to work... 
     };
 
-    App.prototype.countLives = function(){
+    App.prototype.updateChart = function(){
         let vegetables = this.vegetables.length;
         let herbivorous = 0;
         let carnivorous = 0;
@@ -102,8 +94,6 @@ const APP = (() => {
     };
 
     App.prototype.render = function(){
-        // TODO : use bulma Image modal ?
-        //CANVAS.zoom();
         CANVAS.clear();
 
         let entities = this.vegetables.concat(this.animals);
@@ -125,7 +115,7 @@ const APP = (() => {
         this.update(up);
         this.render();
 
-        if(up) this.countLives();        
+        if(up) this.updateChart();        
     };
 
     App.prototype.random = function(max){
@@ -138,7 +128,8 @@ const APP = (() => {
 
 window.onload = () => {
     let app = document.getElementById("app");
-    CANVAS.init(app, "canvas", SETTINGS.canvas);
     FORM.init(app, "form");
+    MODAL.init(document.body, "app-modal");
+    CANVAS.init(MODAL.get(), "canvas", SETTINGS.canvas);
     APP.init();
 };

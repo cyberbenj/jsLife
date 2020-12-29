@@ -10,11 +10,7 @@ const CANVAS = (() => {
         this.height = settings.height;
         this.backgroundColor = settings.color;
         
-        let canvas = dom("canvas", {"id": "canvas", "width": this.width, "height": this.height}, {
-            "click": (element) => {
-                APP.stop();
-            }
-        });
+        let canvas = dom("canvas", {"id": "canvas", "width": this.width, "height": this.height});
         this.parent.append(canvas);
     };
     
@@ -23,25 +19,9 @@ const CANVAS = (() => {
         return canvas;
     };
     
-    Canvas.prototype.zoom = function(){
-        let maxWidth = Math.floor(window.innerWidth/this.width);
-        let maxHeight = Math.floor(window.innerHeight/this.height);
-        let zoom = Math.max(Math.min(maxWidth, maxHeight), 1);
-        this.get().style.transform = "scale("+zoom+")";
-    };
-
-    Canvas.prototype.resize = function(settings){
-        this.width = settings.width;
-        this.height = settings.height;
-        
-        let canvas = this.get();
-        canvas.width = this.width;
-        canvas.height = this.height;
-    };
-    
     Canvas.prototype.clear = function(){
         let ctx = this.get().getContext("2d");
-        ctx.fillStyle = "rgb("+this.backgroundColor.join(", ")+")";
+        ctx.fillStyle = rgb(this.backgroundColor);
         ctx.fillRect(0, 0, this.width, this.height);
     };
     
@@ -68,6 +48,14 @@ const CANVAS = (() => {
     
     Canvas.prototype.isOut = function(position){
         return (position[1] < 0 || position[1] >= this.height || position[0] < 0 || position[0] >= this.width);
+    };
+
+    Canvas.prototype.show = function(){
+        this.get().style.display = "";
+    };
+
+    Canvas.prototype.hide = function(){
+        this.get().style.display = "none";
     };
 
     return new Canvas();
