@@ -3,7 +3,7 @@ const APP = (() => {
     
     function App(){
         this.name = "jsLife";
-        this.description = "a sim about life and death.";
+        this.description = "app-description".i18n();
         this.requestAnimationFrame = null;
         this.vegetables = [];
         this.animals = [];
@@ -24,31 +24,50 @@ const APP = (() => {
 
     App.prototype.init = function(){
         document.title = this.name;
-
+        let app = document.getElementById("app");
+        FORM.init(app, "form");
+        MODAL.init(document.body, "app-modal");
+        CANVAS.init(MODAL.get("card-body"), "canvas", SETTINGS.canvas);
     };
 
     App.prototype.stop = function(){
         cancelAnimationFrame(this.requestAnimationFrame);
 
+        MODAL.get("stop-button").classList.add("is-loading");
+        this.chart.render((res) => {
+            let chart = MODAL.get("chart-img");
+            chart.src = res.url;
+            chart.onload = () => {
+                CANVAS.hide();
+                MODAL.show("chart-img");
+                MODAL.get("stop-button").classList.remove("is-loading");
+                MODAL.hide("stop-button");
+                MODAL.show("restart-button");
+            };
+        }); 
+    };
 
-
-        //this.chart.render();
-        this.reset();
-        //MODAL.hide();
-        CANVAS.hide();
-        MODAL.show("card");
+    App.prototype.close = function(){
+        cancelAnimationFrame(this.requestAnimationFrame);
+        MODAL.hide();
     };
 
     App.prototype.reset = function(){
         this.vegetables = [];
         this.animals = [];
-
         this.chart.reset();
         this.time = 0;
+        this.timer = 0;
+        rng_seed = SETTINGS.main.rng_seed;
+        
+        CANVAS.show();
+        MODAL.hide("chart-img");
+        MODAL.hide("restart-button");
+        MODAL.show("stop-button");
     };
 
     App.prototype.start = function(){
-        rng_seed = SETTINGS.main.rng_seed;
+        this.reset();
         MODAL.show();
         
         let entities = [{setting: "vegetable", object: "Vegetable"}, {setting: "herbivorous", object: "Animal"}, {setting: "carnivorous", object: "Animal"}];
@@ -63,19 +82,9 @@ const APP = (() => {
         }
 
         this.updateChart();
-        this.timer = 0;
         this.run();
     };
-
-    App.prototype.start__ = function(){
-        fetch('https://quickchart.io/chart/create', {
-            method: 'post', headers: {'Content-Type': 'application/json'},
-            body: '{"chart": {"type": "bar", "data": {"labels": ["Hello", "World"], "datasets": [{"label": "Foo", "data": [1, 2]}]}}}'
-        })
-        .then(res => res.json())
-        .then(res => window.open(res.url, "_blank")); // warning : this is bad because it needs user to accept all popups to work... 
-    };
-
+    
     App.prototype.updateChart = function(){
         let vegetables = this.vegetables.length;
         let herbivorous = 0;
@@ -131,9 +140,5 @@ const APP = (() => {
 })();
 
 window.onload = () => {
-    let app = document.getElementById("app");
-    FORM.init(app, "form");
-    MODAL.init(document.body, "app-modal");
-    CANVAS.init(MODAL.get(), "canvas", SETTINGS.canvas);
     APP.init();
 };

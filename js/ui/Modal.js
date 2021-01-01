@@ -7,35 +7,37 @@ const MODAL = (() => {
         this.parent = parent;
         this.id = id;
 
-
-        /*modal.append(
-            dom("div", {"id": id+"-modal-background", "class": "modal-background"}),
-            dom("div", {"id": id+"-modal-content", "class": "modal-content"}),
-            dom("button", {"id": id+"-modal-close" ,"class": "modal-close is-large", "aria-label": "close"}, {
-                "click": (element) => {
-                    APP.stop();
-                }
-            })
-        );*/
-        
         let cardHeader = dom("header", {"class": "modal-card-head"});
         cardHeader.append(
-            dom("p", {"class": "modal-card-title", "textContent": "sim ended"}),
-            dom("button", {"class": "delete", "aria-label": "close"})
+            dom("p", {"class": "modal-card-title", "textContent": "jsLife"}),
+            dom("button", {"class": "delete", "aria-label": "close"}, {
+                "click": () => APP.close()
+            })
+        );
+
+        let cardBody = dom("section", {"id": id+"-modal-card-body", "class": "modal-card-body"});
+        cardBody.append(
+            dom("img", {"id": id+"-modal-chart-img", "class": "is-hidden"})
         );
 
         let cardFooter = dom("footer", {"class": "modal-card-foot"});
         cardFooter.append(
-            dom("button", {"class": "button is-success", "textContent": "chart"}),
-            dom("button", {"class": "button", "textContent": "exit"})
+            dom("button", {"id": id+"-modal-stop-button", "class": "button is-danger", "textContent": "stop"}, {
+                "click": () => APP.stop()
+            }),
+            dom("button", {"id": id+"-modal-restart-button", "class": "button is-primary is-hidden", "textContent": "restart"}, {
+                "click": () => {
+                    APP.close();
+                    APP.start();
+                }
+            }),
+            dom("button", {"class": "button", "textContent": "cancel"}, {
+                "click": () => APP.close()
+            })
         );
 
-        let card = dom("div", {"id": id+"-modal-card", "class": "modal-card is-hidden"});
-        card.append(
-            cardHeader,
-            dom("section", {"class": "modal-card-body", "textContent": "you can view chart or exit"}),
-            cardFooter
-        );
+        let card = dom("div", {"id": id+"-modal-card", "class": "modal-card"});
+        card.append(cardHeader, cardBody, cardFooter);
         
         let modal = dom("div", {"id": id, "class": "modal"});
         modal.append(

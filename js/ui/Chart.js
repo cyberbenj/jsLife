@@ -31,10 +31,14 @@ Chart.prototype.update = function(label, datas){
     }
 };
 
-Chart.prototype.render = function(){
-    let json = JSON.stringify(this.chart);
-    let quickchart = window.open("https://quickchart.io/chart?c="+encodeURI(json), "_blank");
-    quickchart.focus();
+Chart.prototype.render = function(callback){
+    let json = {"chart": this.chart};
+    fetch("https://quickchart.io/chart/create", {
+        method: "post", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(json)
+    })
+    .then((res) => res.json())
+    .then((res) => callback(res));
 };
 
 Chart.prototype.reset = function(){

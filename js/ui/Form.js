@@ -13,7 +13,7 @@ const FORM = (() => {
         form.append(
             dom("h1", {"class": "title", "textContent": APP.name}),
             dom("h2", {"class": "subtitle", "textContent": APP.description}),
-            dom("a", {"class": "button is-primary", "textContent": "start !"}, {
+            dom("a", {"class": "button is-primary", "textContent": "start".i18n()}, {
                 "click": () => APP.start()
             })
         );
@@ -35,7 +35,7 @@ const FORM = (() => {
                 });
                 ul.append(tab);
 
-                let a = dom("a", {"textContent": setting});
+                let a = dom("a", {"textContent": setting.i18n()});
                 tab.append(a);
                 
                 let tabContentClass = (tabId === 0) ? "content tab-content" : "content tab-content is-hidden";
@@ -93,17 +93,15 @@ const FORM = (() => {
 
                 label.append(
                     dom("input", {"type": "checkbox", "id": inputId}, {
-                        "change": (element) => {
-                            SETTINGS[setting][subSetting] = element.checked;
-                        }
+                        "change": (element) => SETTINGS[setting][subSetting] = element.checked
                     }),
-                    dom("text", {"textContent": " "+subSetting})
+                    dom("text", {"textContent": " "+subSetting.i18n()})
                 );
                 control.append(label);
             break;
 
             default:
-                var label = dom("label", {"class": "label", "textContent": subSetting, "for": inputId});
+                var label = dom("label", {"class": "label", "textContent": subSetting.i18n(), "for": inputId});
                 field.append(label);
 
                 var control = dom("div", {"class": "control"});

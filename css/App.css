@@ -1,12 +1,7 @@
 #app-modal canvas{
     image-rendering: -moz-crisp-edges;
     image-rendering: pixelated;
-    width: calc(100% - 40px);
-    height: calc(100% - 40px);
+    width: 100%;
+    height: 100%;
     object-fit: contain;
-    z-index: 1000;
-}
-
-.modal-close{
-    z-index: 1001;
 }
