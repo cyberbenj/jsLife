@@ -12,6 +12,6 @@
 * Use a sensible number of commit messages as well
   * e.g. Your PR should not have 100s of commits
 
-## How to add a new localization
+## How to add/edit a localization
 
 * Edit [js/i18n.js](js/i18n.js)
