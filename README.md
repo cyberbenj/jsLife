@@ -1,6 +1,7 @@
 ## About
 
 **jsLife** is a basic sim about life and death.
+
 Try it : [jsLife](https://cyberbenj.github.io/jsLife/)
 
 ## Contributing
