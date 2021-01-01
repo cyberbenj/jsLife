@@ -21,5 +21,5 @@ See [changelog.md](changelog.md)
 
 ## Repo references
 
-[bulma](https://github.com/jgthms/bulma)
-[quickchart](https://github.com/typpo/quickchart)
+* [bulma](https://github.com/jgthms/bulma)
+* [quickchart](https://github.com/typpo/quickchart)
