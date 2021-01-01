@@ -18,7 +18,7 @@ See [changelog.md](changelog.md)
 
 ## License
 
-[MIT](LICENSE) © cyberbenj
+jsLife is available as open source under the terms of the [MIT](LICENSE).
 
 ## Repo references
 
