@@ -10,7 +10,7 @@ See [contributing.md](contributing.md)
 
 ## Project Wiki
 
-See [Wiki][https://github.com/cyberbenj/jsLife/wiki]
+See [Wiki](https://github.com/cyberbenj/jsLife/wiki)
 
 ## Changelog
 
