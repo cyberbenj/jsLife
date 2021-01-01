@@ -14,4 +14,4 @@
 
 ## How to add a new localization
 
-* Edit [js/i18n.js](i18n.js)
+* Edit [js/i18n.js](js/i18n.js)
