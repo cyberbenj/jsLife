@@ -55,10 +55,16 @@ const FORM = (() => {
 
         let random_checkbox = document.getElementById("input-main-random");
         random_checkbox.addEventListener("change", () => {
+            checkRandom();
+        });
+
+        function checkRandom(){
             let rng_seed_input = document.getElementById("input-main-rng_seed");
             let field = rng_seed_input.parentElement.parentElement;
             field.style.display = (random_checkbox.checked) ? "none" : "";
-        });
+        }
+
+        checkRandom();
     };
 
     Form.prototype.setTab = function(id){
@@ -92,7 +98,7 @@ const FORM = (() => {
                 field.append(label);
 
                 label.append(
-                    dom("input", {"type": "checkbox", "id": inputId}, {
+                    dom("input", {"type": "checkbox", "id": inputId, "checked": SETTINGS[setting][subSetting]}, {
                         "change": (element) => SETTINGS[setting][subSetting] = element.checked
                     }),
                     dom("text", {"textContent": " "+subSetting.i18n()})

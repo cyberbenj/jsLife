@@ -8,15 +8,27 @@ String.prototype.i18n = function(){
 
 const LOCALE = {
     "en": {
-        "app-description": "a basic sim about life and death.",
+        "app-description": "A basic sim about life and death.",
         "start": "Start",
         "main": "Main",
+        "vegetable": "Vegetable",
+        "herbivorous": "Herbivorous",
+        "carnivorous": "Carnivorous",
         "random": "Random",
         "rng_seed": "RNG Seed",
-        "vegetable": "Vegetable",
         "spawn": "Spawn quantity",
         "death": "Lifetime (seconds)",
         "seeding": "Seeding cycle (seconds)",
-        "seeds": "Seeds quantity"
+        "seeds": "Seeds quantity",
+        "health": "Health cycle (seconds)",
+        "hungry": "Hunger cycle (seconds)",
+        "breeding": "Breeding cycle (seconds)",
+        "broods": "Broods quantity",
+        "FOV": "Field of view (pixels)",
+        "speed": "Speed",
+        "stop": "Stop",
+        "cancel": "Cancel",
+        "restart": "Restart",
+        "vegetables": "Vegetables"
     }
 };

@@ -16,7 +16,7 @@ function Chart(type, datasets){
 Chart.prototype.init = function(datasets){
     for(let dataset of datasets){
         this.chart.data.datasets.push({
-            label: dataset.label,
+            label: dataset.label.i18n(),
             fill: false,
             borderColor: dataset.color,
             data : []

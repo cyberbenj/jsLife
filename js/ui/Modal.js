@@ -22,16 +22,16 @@ const MODAL = (() => {
 
         let cardFooter = dom("footer", {"class": "modal-card-foot"});
         cardFooter.append(
-            dom("button", {"id": id+"-modal-stop-button", "class": "button is-danger", "textContent": "stop"}, {
+            dom("button", {"id": id+"-modal-stop-button", "class": "button is-danger", "textContent": "stop".i18n()}, {
                 "click": () => APP.stop()
             }),
-            dom("button", {"id": id+"-modal-restart-button", "class": "button is-primary is-hidden", "textContent": "restart"}, {
+            dom("button", {"id": id+"-modal-restart-button", "class": "button is-primary is-hidden", "textContent": "restart".i18n()}, {
                 "click": () => {
                     APP.close();
                     APP.start();
                 }
             }),
-            dom("button", {"class": "button", "textContent": "cancel"}, {
+            dom("button", {"class": "button", "textContent": "cancel".i18n()}, {
                 "click": () => APP.close()
             })
         );

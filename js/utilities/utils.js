@@ -34,6 +34,7 @@ function dom(type, attributes = null, events = null){
             switch(attribute){
                 case "innerHTML": element.innerHTML = attributes[attribute]; break;
                 case "textContent": element.textContent = attributes[attribute]; break;
+                case "checked": element.checked = attributes[attribute]; break;
                 default: element.setAttribute(attribute, attributes[attribute]); break;
             }
         }
